@@ -5,6 +5,7 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
@@ -22,6 +23,13 @@ export function AuthProvider({ children }) {
   async function signup(name, email, password) {
     setError(null);
     try {
+      // Verificação explícita: nunca deixar criar conta com email já cadastrado
+      const existingMethods = await fetchSignInMethodsForEmail(auth, email);
+      if (existingMethods.length > 0) {
+        setError("Este email já está cadastrado.");
+        return false;
+      }
+
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(cred.user, { displayName: name });
       await setDoc(doc(db, "users", cred.user.uid), {

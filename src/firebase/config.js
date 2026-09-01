@@ -9,12 +9,13 @@ import { getFirestore } from "firebase/firestore";
 // 3) Ative Firestore Database (modo produção) e aplique as regras em `firestore.rules` (raiz do projeto).
 // 4) Cole os valores abaixo.
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_PROJETO.firebaseapp.com",
-  projectId: "SEU_PROJETO",
-  storageBucket: "SEU_PROJETO.appspot.com",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID",
+  apiKey: "AIzaSyAN0bHW2OuYZ9HOZi4ZoxBubWWANEV3rm8",
+  authDomain: "master-gym-flow.firebaseapp.com",
+  projectId: "master-gym-flow",
+  storageBucket: "master-gym-flow.firebasestorage.app",
+  messagingSenderId: "135063658642",
+  appId: "1:135063658642:web:e65f853ff4424690fb464b",
+  measurementId: "G-1ZFP2P37BR"
 };
 
 export const app = initializeApp(firebaseConfig);
