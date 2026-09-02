@@ -4,6 +4,7 @@ import { colors, radius } from "../styles/theme";
 import { Card, Tag, Button, Input, Overlay, EmptyState } from "../components/ui/Primitives";
 import { uid } from "../utils/uid";
 import ExercisePicker from "../components/ExercisePicker";
+import { getSubgroupsInPool } from "../utils/workoutGenerator";
 
 export default function RoutinesView() {
   const { routines, activeRoutineId, switchRoutine, createRoutine, updateRoutine, removeRoutine } = useData();
@@ -77,6 +78,11 @@ export default function RoutinesView() {
   );
 }
 
+function sumSmartCount(w) {
+  const bySub = Object.values(w.subgroupCounts || {}).reduce((a, b) => a + b, 0);
+  return bySub + (w.freeCount || 0);
+}
+
 function RenameForm({ routine, onSave }) {
   const [name, setName] = useState(routine.name);
   return (
@@ -118,7 +124,7 @@ function RoutineWorkoutsModal({ routine, onClose, onSave }) {
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: colors.text }}>{w.title}</div>
               <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 2 }}>
-                {w.exerciseIds.length} exercício(s){w.shuffle ? ` · sorteia ${w.targetCount}` : ""}
+                {w.exerciseIds.length} exercício(s){w.shuffle ? ` · sorteia ${sumSmartCount(w)}` : ""}
               </div>
             </div>
             <div style={{ display: "flex", gap: 6 }}>
@@ -141,19 +147,39 @@ function RoutineWorkoutsModal({ routine, onClose, onSave }) {
 }
 
 function WorkoutEditor({ workout, onCancel, onSave }) {
+  const { allExercises } = useData();
   const [title, setTitle] = useState(workout?.title || "");
   const [exerciseIds, setExerciseIds] = useState(workout?.exerciseIds || []);
-  const [shuffle, setShuffle] = useState(workout?.shuffle || false);
-  const [targetCount, setTargetCount] = useState(workout?.targetCount || Math.max(1, exerciseIds.length));
+  // Caso base: treino novo já nasce "inteligente" (ativado).
+  const [shuffle, setShuffle] = useState(workout ? !!workout.shuffle : true);
+  const [subgroupCounts, setSubgroupCounts] = useState(workout?.subgroupCounts || {});
+  const [freeCount, setFreeCount] = useState(workout?.freeCount ?? 0);
+
+  const poolExercises = allExercises.filter(e => exerciseIds.includes(e.id));
+  const subgroupsInPool = getSubgroupsInPool(poolExercises);
+  const hasFreePool = poolExercises.some(e => !e.subgrupos?.length);
+
+  function countFor(sg) {
+    return subgroupCounts[sg] ?? 1;
+  }
+  function setCountFor(sg, value) {
+    setSubgroupCounts(prev => ({ ...prev, [sg]: Math.max(0, Number(value) || 0) }));
+  }
 
   function handleSave() {
     if (!title.trim() || !exerciseIds.length) return;
+    // limpa contagens de subgrupos que não existem mais no pool
+    const cleanCounts = {};
+    subgroupsInPool.forEach(sg => { cleanCounts[sg] = countFor(sg); });
     onSave({
       id: workout?.id || uid("workout"),
       title: title.trim(),
       exerciseIds,
       shuffle,
-      targetCount: shuffle ? Math.min(targetCount, exerciseIds.length) : exerciseIds.length,
+      subgroupCounts: cleanCounts,
+      freeCount: hasFreePool ? Math.max(0, freeCount) : 0,
+      // mantém seleção manual anterior (usada quando o modo inteligente está desativado)
+      manualSelection: workout?.manualSelection?.filter(id => exerciseIds.includes(id)) || [],
     });
   }
 
@@ -165,14 +191,35 @@ function WorkoutEditor({ workout, onCancel, onSave }) {
 
       <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, cursor: "pointer" }}>
         <input type="checkbox" checked={shuffle} onChange={e => setShuffle(e.target.checked)} style={{ width: 18, height: 18, accentColor: colors.accent }} />
-        <span style={{ fontSize: 12.5, color: colors.text }}>🔀 Sortear exercícios automaticamente (cobrindo os subgrupos musculares)</span>
+        <span style={{ fontSize: 12.5, color: colors.text }}>🔀 Sortear exercícios automaticamente (modo inteligente)</span>
       </label>
 
       {shuffle && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 4 }}>Quantidade de exercícios por sessão</div>
-          <Input type="number" min={1} max={exerciseIds.length || 1} value={targetCount}
-            onChange={e => setTargetCount(Number(e.target.value))} />
+          <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6 }}>
+            QUANTOS EXERCÍCIOS DE CADA SUBGRUPO
+          </div>
+          {!subgroupsInPool.length && (
+            <div style={{ fontSize: 11.5, color: colors.textMuted, marginBottom: 8 }}>
+              Selecione exercícios com subgrupo no pool abaixo para configurar.
+            </div>
+          )}
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {subgroupsInPool.map(sg => (
+              <div key={sg} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 12, color: colors.text, flex: 1 }}>{sg}</span>
+                <Input type="number" min={0} value={countFor(sg)} onChange={e => setCountFor(sg, e.target.value)}
+                  style={{ width: 64, padding: "7px 8px", fontSize: 12.5, textAlign: "center" }} />
+              </div>
+            ))}
+          </div>
+          {hasFreePool && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+              <span style={{ fontSize: 12, color: colors.text, flex: 1 }}>Sem subgrupo (ex: Cardio)</span>
+              <Input type="number" min={0} value={freeCount} onChange={e => setFreeCount(Math.max(0, Number(e.target.value) || 0))}
+                style={{ width: 64, padding: "7px 8px", fontSize: 12.5, textAlign: "center" }} />
+            </div>
+          )}
         </div>
       )}
 
