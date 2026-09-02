@@ -2,9 +2,10 @@ import { useMemo, useState } from "react";
 import { useData } from "../contexts/useData";
 import { colors, radius } from "../styles/theme";
 import { Card, Tag, Button, Input, Select, Overlay, EmptyState } from "../components/ui/Primitives";
+import TopBar from "../components/TopBar";
 import { MUSCLE_GROUPS, SUBGROUPS_BY_GROUP } from "../data/exerciseSeed";
 
-export default function ExercisesView() {
+export default function ExercisesView({ setView }) {
   const { allExercises, addExercise, updateExercise, removeExercise } = useData();
   const [search, setSearch] = useState("");
   const [groupFilter, setGroupFilter] = useState("Todos");
@@ -19,10 +20,11 @@ export default function ExercisesView() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-        <h2 style={{ fontSize: 16, color: colors.text, fontWeight: 700 }}>BANCO DE EXERCÍCIOS</h2>
-        <Button onClick={() => setShowNew(true)} style={{ padding: "8px 14px", fontSize: 12 }}>+ NOVO</Button>
-      </div>
+      <TopBar
+        title="BANCO DE EXERCÍCIOS"
+        onBack={() => setView("home")}
+        right={<Button onClick={() => setShowNew(true)} style={{ padding: "8px 14px", fontSize: 12 }}>+ NOVO</Button>}
+      />
 
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
         <Input placeholder="Buscar..." value={search} onChange={e => setSearch(e.target.value)} style={{ flex: 1.4 }} />

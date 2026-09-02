@@ -3,6 +3,7 @@ import { useData } from "../contexts/useData";
 import { colors, radius, gradients } from "../styles/theme";
 import { Card, Tag, Select, EmptyState, Button } from "../components/ui/Primitives";
 import Calendar from "../components/ui/Calendar";
+import TopBar from "../components/TopBar";
 
 const PERIODS = [
   { id: "7", label: "7 dias" },
@@ -11,12 +12,13 @@ const PERIODS = [
   { id: "all", label: "Sempre" },
 ];
 
-export default function StatsView() {
+export default function StatsView({ setView }) {
   const { history, routines, removeHistorySession } = useData();
   const [tab, setTab] = useState("calendar");
 
   return (
     <div>
+      <TopBar title="ESTATÍSTICAS" onBack={() => setView("home")} />
       <div style={{ display: "flex", background: colors.bgInput, borderRadius: radius.pill, padding: 3, marginBottom: 16 }}>
         {[["calendar", "📅 CALENDÁRIO"], ["ranking", "🏆 RANKING"]].map(([id, label]) => (
           <button key={id} onClick={() => setTab(id)} style={{
