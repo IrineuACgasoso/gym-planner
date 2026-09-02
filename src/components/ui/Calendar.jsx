@@ -3,7 +3,9 @@ import { colors, radius } from "../../styles/theme";
 
 const WEEKDAYS = ["D", "S", "T", "Q", "Q", "S", "S"];
 const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const MAX_VISIBLE = 2; // qtde de treinos mostrados no dia fechado antes do "+N"
 
+// markedDates: { [date]: string[] } -> lista de títulos dos treinos daquele dia
 export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
   const [cursor, setCursor] = useState(() => {
     const d = new Date();
@@ -40,30 +42,57 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
         <button onClick={() => shiftMonth(1)} style={navBtn}>›</button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4, marginBottom: 4 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 3, marginBottom: 4 }}>
         {WEEKDAYS.map((w, i) => (
           <div key={i} style={{ textAlign: "center", fontSize: 10, color: colors.textFaint, fontWeight: 700 }}>{w}</div>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 3, alignItems: "stretch" }}>
         {cells.map((d, i) => {
           if (!d) return <div key={i} />;
           const str = dateStr(d);
-          const marked = markedDates[str];
+          const workouts = markedDates[str] || [];
+          const marked = workouts.length > 0;
           const isToday = str === todayStr;
           const isSelected = str === selectedDate;
+          const visibleWorkouts = isSelected ? workouts : workouts.slice(0, MAX_VISIBLE);
+          const hiddenCount = workouts.length - visibleWorkouts.length;
+
           return (
             <button key={i} onClick={() => onSelectDate(str)} style={{
-              aspectRatio: "1", borderRadius: radius.sm, border: `1px solid ${isSelected ? colors.accent : "transparent"}`,
+              minHeight: 46, borderRadius: radius.sm, border: `1px solid ${isSelected ? colors.accent : "transparent"}`,
               background: isSelected ? colors.tagBg : marked ? colors.bgElevated2 : "transparent",
-              color: marked ? colors.babyBlue : isToday ? colors.text : colors.textMuted,
-              fontSize: 12, fontWeight: marked ? 700 : 500, cursor: "pointer",
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2,
-              position: "relative",
+              cursor: "pointer", padding: "5px 2px 6px", boxSizing: "border-box",
+              display: "flex", flexDirection: "column", alignItems: "center",
+              justifyContent: marked ? "flex-start" : "center", gap: 3,
+              position: "relative", width: "100%", minWidth: 0, overflow: "hidden",
             }}>
-              {d}
-              {marked && <div style={{ width: 4, height: 4, borderRadius: 4, background: colors.cyan }} />}
+              <span style={{
+                fontSize: 12, fontWeight: marked ? 700 : 500, lineHeight: 1,
+                color: marked ? colors.babyBlue : isToday ? colors.text : colors.textMuted,
+              }}>{d}</span>
+
+              {marked && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 2, width: "100%", minWidth: 0 }}>
+                  {visibleWorkouts.map((title, wi) => (
+                    <div key={wi} style={{ display: "flex", alignItems: "center", gap: 2, width: "100%", minWidth: 0 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: 4, background: colors.cyan, flexShrink: 0 }} />
+                      <span style={{
+                        fontSize: 8.5, fontWeight: 600, color: colors.babyBlue, lineHeight: 1.2, minWidth: 0, flex: 1,
+                        textAlign: "left",
+                        whiteSpace: isSelected ? "normal" : "nowrap",
+                        overflow: isSelected ? "visible" : "hidden",
+                        textOverflow: isSelected ? "clip" : "ellipsis",
+                        wordBreak: isSelected ? "break-word" : "normal",
+                      }}>{title}</span>
+                    </div>
+                  ))}
+                  {!isSelected && hiddenCount > 0 && (
+                    <span style={{ fontSize: 8, color: colors.textFaint, textAlign: "left", paddingLeft: 6 }}>+{hiddenCount}</span>
+                  )}
+                </div>
+              )}
             </button>
           );
         })}

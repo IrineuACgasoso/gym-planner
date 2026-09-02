@@ -43,7 +43,10 @@ function CalendarTab({ history, onDelete, onUpdate }) {
 
   const markedDates = useMemo(() => {
     const map = {};
-    history.forEach(h => { map[h.date] = true; });
+    history.forEach(h => {
+      if (!map[h.date]) map[h.date] = [];
+      map[h.date].push(h.workoutTitle);
+    });
     return map;
   }, [history]);
 
