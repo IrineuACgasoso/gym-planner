@@ -4,10 +4,18 @@ import { colors, radius } from "../styles/theme";
 import { Card, Tag, Button, Input } from "../components/ui/Primitives";
 import { rerollSingleExercise } from "../utils/workoutGenerator";
 
-function formatHHMM(raw) {
-  const digits = raw.replace(/\D/g, "").slice(0, 4);
-  if (digits.length <= 2) return digits;
-  return `${digits.slice(0, 2)}:${digits.slice(2)}`;
+function formatCardioTime(raw) {
+  const digits = raw.replace(/\D/g, "").slice(0, 6);
+  if (digits.length <= 2) return digits; // ainda digitando os segundos
+  const minStr = digits.slice(0, -2);
+  const secStr = digits.slice(-2);
+  const totalMin = parseInt(minStr, 10) || 0;
+  if (totalMin >= 60) {
+    const h = Math.floor(totalMin / 60);
+    const m = totalMin % 60;
+    return `${h}:${String(m).padStart(2, "0")}:${secStr}`;
+  }
+  return `${minStr}:${secStr}`;
 }
 
 export default function ActiveWorkoutView({ setView }) {
@@ -172,13 +180,13 @@ export default function ActiveWorkoutView({ setView }) {
 
             {ex.isCardio ? (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                <Field label="Tempo (hh:mm)" value={ex.cardio.tempo} mask="time"
+                <Field label="Tempo (mm:ss)" value={ex.cardio.tempo} mask="time"
                   onChange={v => patchExercise(idx, { cardio: { ...ex.cardio, tempo: v } })}
                   onFocus={e => (lastFocusedRef.current = e.target)} />
                 <Field label="Distância (km)" value={ex.cardio.km}
                   onChange={v => patchExercise(idx, { cardio: { ...ex.cardio, km: v } })}
                   onFocus={e => (lastFocusedRef.current = e.target)} />
-                <Field label="Pace (hh:mm/km)" value={ex.cardio.pace} mask="time"
+                <Field label="Pace (mm:ss/km)" value={ex.cardio.pace} mask="time"
                   onChange={v => patchExercise(idx, { cardio: { ...ex.cardio, pace: v } })}
                   onFocus={e => (lastFocusedRef.current = e.target)} />
               </div>
@@ -219,7 +227,7 @@ export default function ActiveWorkoutView({ setView }) {
 
 function Field({ label, value, onChange, small, mask, onFocus }) {
   function handleChange(e) {
-    const v = mask === "time" ? formatHHMM(e.target.value) : e.target.value;
+    const v = mask === "time" ? formatCardioTime(e.target.value) : e.target.value;
     onChange(v);
   }
   return (
