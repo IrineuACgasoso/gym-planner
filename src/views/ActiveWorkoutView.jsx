@@ -246,7 +246,8 @@ export default function ActiveWorkoutView({ setView }) {
       </div>
 
       <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0, padding: "16px 14px 20px",
+        position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
+        width: "100%", maxWidth: 560, padding: "16px 14px 20px",
         background: `linear-gradient(180deg, transparent, ${colors.bg} 35%)`, zIndex: 60,
       }}>
         <button onClick={handleFinish} style={{

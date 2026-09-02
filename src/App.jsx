@@ -22,7 +22,7 @@ function AppShell() {
     <div style={{ background: colors.bg, minHeight: "100vh", fontFamily: font, color: colors.text }}>
       <GlobalStyle />
 
-      <div style={{ padding: "18px 16px 24px" }}>
+      <div style={{ maxWidth: 560, margin: "0 auto", minHeight: "100vh", padding: "18px 16px 24px" }}>
         {view === "home" && <HomeView setView={setView} />}
         {view === "chooseWorkout" && <ChooseWorkoutView setView={setView} />}
         {view === "workout" && <ActiveWorkoutView setView={setView} />}

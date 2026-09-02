@@ -41,7 +41,8 @@ export default function InstallBanner() {
 
   return (
     <div style={{
-      position: "fixed", bottom: 78, left: 12, right: 12, zIndex: 95,
+      position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)",
+      width: "calc(100% - 24px)", maxWidth: 528, zIndex: 95,
       background: colors.bgElevated2, border: `1px solid ${colors.accent}`, borderRadius: radius.lg,
       padding: 12, display: "flex", alignItems: "center", gap: 10, boxShadow: shadows.glow, fontFamily: font,
     }}>

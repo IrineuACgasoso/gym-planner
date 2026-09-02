@@ -34,6 +34,11 @@ export default function ChooseWorkoutView({ setView }) {
     setPendingDelete(null);
   }
 
+  async function toggleShuffle(w) {
+    const workouts = activeRoutine.workouts.map(item => (item.id === w.id ? { ...item, shuffle: !item.shuffle } : item));
+    await updateRoutine({ ...activeRoutine, workouts });
+  }
+
   return (
     <div>
       <TopBar title={activeRoutine.name.toUpperCase()} onBack={() => setView("home")} />
@@ -51,7 +56,7 @@ export default function ChooseWorkoutView({ setView }) {
               style={{
                 width: "100%", textAlign: "left", background: colors.bgElevated,
                 border: `1.5px solid ${colors.border}`, borderRadius: radius.lg,
-                padding: "16px 56px 16px 16px", cursor: w.exerciseIds?.length ? "pointer" : "not-allowed",
+                padding: "16px 84px 16px 16px", cursor: w.exerciseIds?.length ? "pointer" : "not-allowed",
                 opacity: w.exerciseIds?.length ? 1 : 0.5,
               }}
             >
@@ -62,6 +67,15 @@ export default function ChooseWorkoutView({ setView }) {
             </button>
 
             <div style={{ position: "absolute", top: 10, right: 10, display: "flex", gap: 4 }}>
+              <button
+                onClick={e => { e.stopPropagation(); toggleShuffle(w); }}
+                title={w.shuffle ? "Modo inteligente (toque para tornar manual)" : "Modo manual (toque para tornar inteligente)"}
+                style={{
+                  ...iconBtnStyle, width: "auto", padding: "0 8px", gap: 4,
+                  color: w.shuffle ? colors.babyBlue : colors.textMuted,
+                  borderColor: w.shuffle ? colors.accentSoft : colors.border,
+                }}
+              >{w.shuffle ? "🔀" : "✋"}</button>
               <button onClick={() => setEditingWorkout(w)} style={iconBtnStyle}>✎</button>
               <button onClick={() => setPendingDelete(w)} style={{ ...iconBtnStyle, color: colors.danger }}>🗑</button>
             </div>

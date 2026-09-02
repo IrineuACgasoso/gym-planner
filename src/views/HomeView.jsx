@@ -48,8 +48,8 @@ export default function HomeView({ setView }) {
             {currentWorkout ? "▶ CONTINUAR TREINO" : "▶ INICIAR TREINO"}
           </HomeButton>
           {nextWorkout && (
-            <div style={{ fontSize: 11, color: colors.textFaint, textAlign: "center", marginTop: -10 }}>
-              Próximo: <span style={{ color: colors.babyBlue, fontWeight: 600 }}>{nextWorkout.title}</span>
+            <div style={{ fontSize: 13.5, color: colors.text, textAlign: "center", marginTop: -6 }}>
+              Próximo: <span style={{ color: colors.babyBlue, fontWeight: 700 }}>{nextWorkout.title}</span>
             </div>
           )}
 
