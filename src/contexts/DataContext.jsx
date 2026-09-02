@@ -155,6 +155,11 @@ export function DataProvider({ children }) {
     await fdb.deleteHistorySession(uidVal, id);
   }, [uidVal]);
 
+  const updateHistorySession = useCallback(async updated => {
+    setHistory(prev => prev.map(h => (h.id === updated.id ? updated : h)));
+    await fdb.saveHistorySession(uidVal, updated);
+  }, [uidVal]);
+
   const activeRoutine = routines.find(r => r.id === activeRoutineId) || routines[0] || null;
 
   const value = {
@@ -162,7 +167,7 @@ export function DataProvider({ children }) {
     activeRoutine, activeRoutineId, currentWorkout,
     createRoutine, updateRoutine, removeRoutine, switchRoutine,
     addExercise, updateExercise, removeExercise,
-    startWorkout, updateCurrentWorkout, cancelWorkout, finishWorkout, removeHistorySession,
+    startWorkout, updateCurrentWorkout, cancelWorkout, finishWorkout, removeHistorySession, updateHistorySession,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useData } from "../contexts/useData";
 import { colors, radius, gradients } from "../styles/theme";
-import { Card, Tag, Select, EmptyState, Button } from "../components/ui/Primitives";
+import { Card, Tag, Select, EmptyState, Button, Input } from "../components/ui/Primitives";
 import Calendar from "../components/ui/Calendar";
 import TopBar from "../components/TopBar";
 
@@ -13,7 +13,7 @@ const PERIODS = [
 ];
 
 export default function StatsView({ setView }) {
-  const { history, routines, removeHistorySession } = useData();
+  const { history, routines, removeHistorySession, updateHistorySession } = useData();
   const [tab, setTab] = useState("calendar");
 
   return (
@@ -31,14 +31,15 @@ export default function StatsView({ setView }) {
       </div>
 
       {tab === "calendar"
-        ? <CalendarTab history={history} onDelete={removeHistorySession} />
+        ? <CalendarTab history={history} onDelete={removeHistorySession} onUpdate={updateHistorySession} />
         : <RankingTab history={history} routines={routines} />}
     </div>
   );
 }
 
-function CalendarTab({ history, onDelete }) {
+function CalendarTab({ history, onDelete, onUpdate }) {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [editingId, setEditingId] = useState(null);
 
   const markedDates = useMemo(() => {
     const map = {};
@@ -51,7 +52,7 @@ function CalendarTab({ history, onDelete }) {
   return (
     <div>
       <Card style={{ marginBottom: 14 }}>
-        <Calendar markedDates={markedDates} onSelectDate={setSelectedDate} selectedDate={selectedDate} />
+        <Calendar markedDates={markedDates} onSelectDate={date => { setSelectedDate(date); setEditingId(null); }} selectedDate={selectedDate} />
       </Card>
 
       <div style={{ fontSize: 12, color: colors.textFaint, marginBottom: 8, letterSpacing: 0.5 }}>
@@ -62,30 +63,109 @@ function CalendarTab({ history, onDelete }) {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {sessionsForDate.map(s => (
-          <Card key={s.id}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-              <div>
-                <div style={{ fontSize: 14.5, fontWeight: 700, color: colors.text }}>{s.workoutTitle}</div>
-                <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 2 }}>{s.routineName}</div>
-              </div>
-              <Button variant="danger" onClick={() => { if (confirm("Excluir este registro?")) onDelete(s.id); }} style={{ padding: "5px 9px", fontSize: 10 }}>🗑</Button>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {s.exercises.map((e, i) => (
-                <div key={i} style={{ fontSize: 12, color: colors.textMuted, display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ color: e.done ? colors.text : colors.textFaint }}>{e.done ? "✓" : "—"} {e.name}</span>
-                  <span>
-                    {e.isCardio
-                      ? [e.cardio?.km && `${e.cardio.km}km`, e.cardio?.tempo && `${e.cardio.tempo}min`, e.cardio?.pace && `${e.cardio.pace}/km`].filter(Boolean).join(" · ")
-                      : `${e.sets?.length || 0} série(s)`}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </Card>
+          <SessionCard
+            key={editingId === s.id ? `${s.id}-editing` : s.id}
+            session={s}
+            editing={editingId === s.id}
+            onToggleEdit={() => setEditingId(editingId === s.id ? null : s.id)}
+            onDelete={() => { if (confirm("Excluir este registro?")) onDelete(s.id); }}
+            onSave={updated => { onUpdate(updated); setEditingId(null); }}
+          />
         ))}
       </div>
     </div>
+  );
+}
+
+function SessionCard({ session, editing, onToggleEdit, onDelete, onSave }) {
+  // Remonta (via key diferente no pai) sempre que o modo de edição é (re)aberto, então o estado inicial já nasce sincronizado.
+  const [draft, setDraft] = useState(session);
+
+  function patchExercise(idx, patch) {
+    setDraft(d => ({ ...d, exercises: d.exercises.map((e, i) => (i === idx ? { ...e, ...patch } : e)) }));
+  }
+
+  function patchSet(idx, setIdx, patch) {
+    setDraft(d => {
+      const ex = d.exercises[idx];
+      const sets = ex.sets.map((s, i) => (i === setIdx ? { ...s, ...patch } : s));
+      return { ...d, exercises: d.exercises.map((e, i) => (i === idx ? { ...e, sets } : e)) };
+    });
+  }
+
+  const s = editing ? draft : session;
+
+  return (
+    <Card>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, gap: 10 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 14.5, fontWeight: 700, color: colors.text }}>{s.workoutTitle}</div>
+          <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 2 }}>{s.routineName}</div>
+          {editing && (
+            <Input type="date" value={s.date} onChange={ev => setDraft(d => ({ ...d, date: ev.target.value }))}
+              style={{ marginTop: 8, padding: "7px 8px", fontSize: 12.5 }} />
+          )}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+          <Button
+            variant={editing ? "secondary" : "ghost"}
+            onClick={onToggleEdit}
+            title="Editar treino finalizado"
+            style={{ padding: "5px 9px", fontSize: 10 }}
+          >✏️</Button>
+          <Button variant="danger" onClick={onDelete} style={{ padding: "5px 9px", fontSize: 10 }}>🗑</Button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: editing ? 10 : 6 }}>
+        {s.exercises.map((e, i) => (
+          <div key={i}>
+            {editing ? (
+              <div style={{ background: colors.bgInput, borderRadius: radius.sm, padding: 8 }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: e.isCardio ? 6 : 8, cursor: "pointer" }}>
+                  <input type="checkbox" checked={!!e.done} onChange={ev => patchExercise(i, { done: ev.target.checked })}
+                    style={{ width: 16, height: 16, accentColor: colors.accent }} />
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: colors.text }}>{e.name}</span>
+                </label>
+                {e.isCardio ? (
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
+                    <Input placeholder="Tempo (mm:ss)" value={e.cardio?.tempo || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, tempo: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 12 }} />
+                    <Input placeholder="Distância (km)" value={e.cardio?.km || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, km: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 12 }} />
+                    <Input placeholder="Pace (mm:ss/km)" value={e.cardio?.pace || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, pace: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 12 }} />
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                    {(e.sets || []).map((set, si) => (
+                      <div key={si} style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                        <span style={{ fontSize: 10.5, color: colors.textFaint, width: 14 }}>{si + 1}</span>
+                        <Input placeholder="Reps" value={set.reps || ""} onChange={ev => patchSet(i, si, { reps: ev.target.value })} style={{ padding: "6px 8px", fontSize: 12 }} />
+                        <Input placeholder="Peso (kg)" value={set.peso || ""} onChange={ev => patchSet(i, si, { peso: ev.target.value })} style={{ padding: "6px 8px", fontSize: 12 }} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ fontSize: 12, color: colors.textMuted, display: "flex", justifyContent: "space-between" }}>
+                <span style={{ color: e.done ? colors.text : colors.textFaint }}>{e.done ? "✓" : "—"} {e.name}</span>
+                <span>
+                  {e.isCardio
+                    ? [e.cardio?.km && `${e.cardio.km}km`, e.cardio?.tempo && `${e.cardio.tempo}min`, e.cardio?.pace && `${e.cardio.pace}/km`].filter(Boolean).join(" · ")
+                    : `${e.sets?.length || 0} série(s)`}
+                </span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {editing && (
+        <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          <Button variant="ghost" onClick={onToggleEdit} style={{ flex: 1, padding: "9px 0", fontSize: 11.5 }}>CANCELAR</Button>
+          <Button onClick={() => onSave(draft)} style={{ flex: 1, padding: "9px 0", fontSize: 11.5 }}>SALVAR</Button>
+        </div>
+      )}
+    </Card>
   );
 }
 
