@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { colors, radius } from "../styles/theme";
 import { Tag, Button, Overlay } from "./ui/Primitives";
+import { sortByGroup } from "../data/exerciseSeed";
 
-export default function ManualSelectionOverlay({ workout, allExercises, onClose, onConfirm }) {
-  const pool = allExercises.filter(e => workout.exerciseIds.includes(e.id));
+export default function ManualSelectionOverlay({ workout, allExercises, onClose, onSkip, onConfirm }) {
+  const pool = sortByGroup(allExercises.filter(e => workout.exerciseIds.includes(e.id)));
   const initial = (workout.manualSelection?.length ? workout.manualSelection : workout.exerciseIds)
     .filter(id => workout.exerciseIds.includes(id));
   const [selected, setSelected] = useState(initial);
 
   return (
-    <Overlay title={`Escolha os exercícios — ${workout.title}`} onClose={onClose}>
+    <Overlay title={`Escolha os exercícios — ${workout.title}`} onClose={onClose} size="lg">
       <div style={{ fontSize: 11.5, color: colors.textMuted, marginBottom: 10 }}>
         Este treino está no modo manual. Marque os exercícios que quer fazer hoje — sua escolha fica salva para a próxima vez.
       </div>
-      <div style={{ maxHeight: 320, overflowY: "auto", border: `1px solid ${colors.border}`, borderRadius: radius.md, marginBottom: 14 }}>
+      <div style={{ maxHeight: "52vh", overflowY: "auto", border: `1px solid ${colors.border}`, borderRadius: radius.md, marginBottom: 14 }}>
         {pool.map(e => {
           const checked = selected.includes(e.id);
           return (
@@ -34,6 +35,11 @@ export default function ManualSelectionOverlay({ workout, allExercises, onClose,
           );
         })}
       </div>
+      {onSkip && (
+        <Button onClick={onSkip} variant="ghost" style={{ width: "100%", marginBottom: 10 }}>
+          ⏭ PULAR ESTE TREINO
+        </Button>
+      )}
       <Button onClick={() => onConfirm(selected)} style={{ width: "100%" }} disabled={!selected.length}>
         SALVAR E INICIAR ({selected.length})
       </Button>

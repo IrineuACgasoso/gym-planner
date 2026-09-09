@@ -105,6 +105,7 @@ export default function ChooseWorkoutView({ setView }) {
           workout={manualPickFor}
           allExercises={allExercises}
           onClose={() => setManualPickFor(null)}
+          onSkip={() => setManualPickFor(null)}
           onConfirm={ids => confirmManualSelection(manualPickFor, ids)}
         />
       )}

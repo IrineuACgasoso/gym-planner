@@ -3,7 +3,7 @@ import { useData } from "../contexts/useData";
 import { colors, radius } from "../styles/theme";
 import { Card, Tag, Button, Input, Select, Overlay, EmptyState } from "../components/ui/Primitives";
 import TopBar from "../components/TopBar";
-import { MUSCLE_GROUPS, SUBGROUPS_BY_GROUP } from "../data/exerciseSeed";
+import { MUSCLE_GROUPS, SUBGROUPS_BY_GROUP, sortByGroup } from "../data/exerciseSeed";
 
 export default function ExercisesView({ setView }) {
   const { allExercises, addExercise, updateExercise, removeExercise } = useData();
@@ -12,11 +12,11 @@ export default function ExercisesView({ setView }) {
   const [showNew, setShowNew] = useState(false);
   const [editing, setEditing] = useState(null);
 
-  const filtered = useMemo(() => allExercises.filter(e => {
+  const filtered = useMemo(() => sortByGroup(allExercises.filter(e => {
     if (groupFilter !== "Todos" && e.grupo !== groupFilter) return false;
     if (search && !e.name.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
-  }), [allExercises, search, groupFilter]);
+  })), [allExercises, search, groupFilter]);
 
   return (
     <div>
@@ -78,11 +78,23 @@ function ExerciseForm({ exercise, onClose, onSave }) {
   const [name, setName] = useState(exercise?.name || "");
   const [grupo, setGrupo] = useState(exercise?.grupo || MUSCLE_GROUPS[0]);
   const [subgrupos, setSubgrupos] = useState(exercise?.subgrupos || []);
+  const [extraSubgroups, setExtraSubgroups] = useState([]); // subgrupos customizados adicionados nesta sessão
+  const [addingSub, setAddingSub] = useState(false);
+  const [newSubName, setNewSubName] = useState("");
 
-  const availableSubgroups = SUBGROUPS_BY_GROUP[grupo] || [];
+  const availableSubgroups = [...(SUBGROUPS_BY_GROUP[grupo] || []), ...extraSubgroups];
 
   function toggleSub(s) {
     setSubgrupos(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
+  }
+
+  function confirmNewSub() {
+    const s = newSubName.trim();
+    if (!s) { setAddingSub(false); return; }
+    if (!availableSubgroups.includes(s)) setExtraSubgroups(prev => [...prev, s]);
+    setSubgrupos(prev => prev.includes(s) ? prev : [...prev, s]);
+    setNewSubName("");
+    setAddingSub(false);
   }
 
   function handleSave() {
@@ -91,7 +103,7 @@ function ExerciseForm({ exercise, onClose, onSave }) {
   }
 
   return (
-    <Overlay title={exercise ? "Editar Exercício" : "Novo Exercício"} onClose={onClose}>
+    <Overlay title={exercise ? "Editar Exercício" : "Novo Exercício"} onClose={onClose} size="lg">
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 4 }}>Nome</div>
         <Input placeholder="Ex: Crucifixo na Polia" value={name} onChange={e => setName(e.target.value)} autoFocus />
@@ -99,31 +111,49 @@ function ExerciseForm({ exercise, onClose, onSave }) {
 
       <div style={{ marginBottom: 12 }}>
         <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 4 }}>Grupo Muscular</div>
-        <Select value={grupo} onChange={e => { setGrupo(e.target.value); setSubgrupos([]); }}>
+        <Select value={grupo} onChange={e => { setGrupo(e.target.value); setSubgrupos([]); setExtraSubgroups([]); }}>
           {MUSCLE_GROUPS.map(g => <option key={g}>{g}</option>)}
         </Select>
       </div>
 
-      {!!availableSubgroups.length && (
-        <div style={{ marginBottom: 6 }}>
-          <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6 }}>
-            Subgrupo(s) — deixe vazio se não for necessário garantir cobertura
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {availableSubgroups.map(s => {
-              const active = subgrupos.includes(s);
-              return (
-                <button key={s} type="button" onClick={() => toggleSub(s)} style={{
-                  background: active ? colors.tagBg : colors.bgInput,
-                  border: `1px solid ${active ? colors.accent : colors.border}`,
-                  color: active ? colors.babyBlue : colors.textMuted,
-                  padding: "6px 11px", borderRadius: radius.pill, fontSize: 11.5, cursor: "pointer",
-                }}>{s}</button>
-              );
-            })}
-          </div>
+      <div style={{ marginBottom: 6 }}>
+        <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6 }}>
+          Subgrupo(s) — deixe vazio se não for necessário garantir cobertura
         </div>
-      )}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+          {availableSubgroups.map(s => {
+            const active = subgrupos.includes(s);
+            return (
+              <button key={s} type="button" onClick={() => toggleSub(s)} style={{
+                background: active ? colors.tagBg : colors.bgInput,
+                border: `1px solid ${active ? colors.accent : colors.border}`,
+                color: active ? colors.babyBlue : colors.textMuted,
+                padding: "6px 11px", borderRadius: radius.pill, fontSize: 11.5, cursor: "pointer",
+              }}>{s}</button>
+            );
+          })}
+
+          {addingSub ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <Input
+                autoFocus
+                placeholder="Novo subgrupo"
+                value={newSubName}
+                onChange={e => setNewSubName(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter") confirmNewSub(); if (e.key === "Escape") { setAddingSub(false); setNewSubName(""); } }}
+                onBlur={confirmNewSub}
+                style={{ width: 140, padding: "6px 9px", fontSize: 11.5 }}
+              />
+            </div>
+          ) : (
+            <button type="button" onClick={() => setAddingSub(true)} title="Adicionar subgrupo" style={{
+              background: colors.bgInput, border: `1px dashed ${colors.border}`, color: colors.babyBlue,
+              width: 28, height: 28, borderRadius: radius.pill, cursor: "pointer", fontSize: 15, fontWeight: 700,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>+</button>
+          )}
+        </div>
+      </div>
 
       <Button onClick={handleSave} style={{ width: "100%", marginTop: 16 }} disabled={!name.trim()}>SALVAR</Button>
     </Overlay>

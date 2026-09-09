@@ -150,6 +150,26 @@ export function DataProvider({ children }) {
     return session;
   }, [currentWorkout, uidVal]);
 
+  // Registra que um treino foi pulado (não realizado), só para efeito de ordem/sequência.
+  // Não conta como treino feito nas estatísticas.
+  const skipWorkout = useCallback(async (routine, workout) => {
+    if (!routine || !workout) return;
+    const session = {
+      id: uid("session"),
+      routineId: routine.id,
+      routineName: routine.name,
+      workoutId: workout.id,
+      workoutTitle: workout.title,
+      date: new Date().toISOString().slice(0, 10),
+      finishedAt: new Date().toISOString(),
+      exercises: [],
+      skipped: true,
+    };
+    setHistory(prev => [...prev, session]);
+    await fdb.saveHistorySession(uidVal, session);
+    return session;
+  }, [uidVal]);
+
   const removeHistorySession = useCallback(async id => {
     setHistory(prev => prev.filter(h => h.id !== id));
     await fdb.deleteHistorySession(uidVal, id);
@@ -167,7 +187,7 @@ export function DataProvider({ children }) {
     activeRoutine, activeRoutineId, currentWorkout,
     createRoutine, updateRoutine, removeRoutine, switchRoutine,
     addExercise, updateExercise, removeExercise,
-    startWorkout, updateCurrentWorkout, cancelWorkout, finishWorkout, removeHistorySession, updateHistorySession,
+    startWorkout, updateCurrentWorkout, cancelWorkout, finishWorkout, skipWorkout, removeHistorySession, updateHistorySession,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

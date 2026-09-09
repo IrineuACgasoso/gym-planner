@@ -86,36 +86,41 @@ export function Select({ style, children, ...props }) {
   );
 }
 
-export function Overlay({ onClose, children, title }) {
+export function Overlay({ onClose, children, title, size = "md" }) {
+  const isLg = size === "lg";
   return (
     <div
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, background: "rgba(2,6,12,0.75)",
         backdropFilter: "blur(3px)", zIndex: 200, display: "flex",
-        alignItems: "flex-end", justifyContent: "center",
+        alignItems: isLg ? "flex-start" : "flex-end", justifyContent: "center",
+        paddingTop: isLg ? "3vh" : 0,
       }}
     >
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          background: colors.bgElevated, borderTop: `1px solid ${colors.border}`,
-          borderLeft: `1px solid ${colors.border}`, borderRight: `1px solid ${colors.border}`,
-          borderRadius: "20px 20px 0 0", width: "100%", maxWidth: 480,
-          maxHeight: "88vh", overflowY: "auto", padding: 20,
-          boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
+          background: colors.bgElevated, border: `1px solid ${colors.border}`,
+          borderRadius: isLg ? radius.lg : "20px 20px 0 0", width: "100%", maxWidth: isLg ? 560 : 480,
+          maxHeight: isLg ? "94vh" : "88vh", display: "flex", flexDirection: "column",
+          overflow: "hidden", boxShadow: isLg ? shadows.card : "0 -10px 40px rgba(0,0,0,0.5)",
         }}
       >
-        {title && (
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, letterSpacing: 0.5 }}>{title}</h2>
-            <button onClick={onClose} style={{
-              background: colors.bgInput, border: `1px solid ${colors.border}`, color: colors.textMuted,
-              width: 30, height: 30, borderRadius: radius.pill, cursor: "pointer", fontSize: 14,
-            }}>✕</button>
-          </div>
-        )}
-        {children}
+        <div style={{ padding: "20px 20px 0 20px" }}>
+          {title && (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, letterSpacing: 0.5 }}>{title}</h2>
+              <button onClick={onClose} style={{
+                background: colors.bgInput, border: `1px solid ${colors.border}`, color: colors.textMuted,
+                width: 30, height: 30, borderRadius: radius.pill, cursor: "pointer", fontSize: 14,
+              }}>✕</button>
+            </div>
+          )}
+        </div>
+        <div style={{ padding: "0 20px 20px 20px", overflowY: "auto", flex: 1 }}>
+          {children}
+        </div>
       </div>
     </div>
   );

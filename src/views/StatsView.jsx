@@ -13,7 +13,8 @@ const PERIODS = [
 ];
 
 export default function StatsView({ setView }) {
-  const { history, routines, removeHistorySession, updateHistorySession } = useData();
+  const { history: fullHistory, routines, removeHistorySession, updateHistorySession } = useData();
+  const history = useMemo(() => fullHistory.filter(h => !h.skipped), [fullHistory]);
   const [tab, setTab] = useState("calendar");
 
   return (

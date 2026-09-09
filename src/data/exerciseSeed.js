@@ -29,6 +29,16 @@ export const SUBGROUPS_BY_GROUP = {
   "Corpo Inteiro": [],
 };
 
+// Ordena uma lista de exercícios agrupando por grupo muscular (na ordem de MUSCLE_GROUPS),
+// e dentro de cada grupo, alfabeticamente pelo nome.
+export function sortByGroup(list) {
+  return [...list].sort((a, b) => {
+    const gi = MUSCLE_GROUPS.indexOf(a.grupo) - MUSCLE_GROUPS.indexOf(b.grupo);
+    if (gi !== 0) return gi;
+    return a.name.localeCompare(b.name, "pt-BR");
+  });
+}
+
 let i = 0;
 const ex = (name, grupo, subgrupos = []) => ({ id: `seed_${++i}`, name, grupo, subgrupos, custom: false });
 

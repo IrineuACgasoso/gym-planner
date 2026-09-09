@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useData } from "../contexts/useData";
 import { colors, radius } from "../styles/theme";
 import { Input, Select, Tag } from "./ui/Primitives";
-import { MUSCLE_GROUPS } from "../data/exerciseSeed";
+import { MUSCLE_GROUPS, sortByGroup } from "../data/exerciseSeed";
 
 export default function ExercisePicker({ selectedIds, onChange }) {
   const { allExercises } = useData();
@@ -10,11 +10,12 @@ export default function ExercisePicker({ selectedIds, onChange }) {
   const [groupFilter, setGroupFilter] = useState("Todos");
 
   const filtered = useMemo(() => {
-    return allExercises.filter(e => {
+    const list = allExercises.filter(e => {
       if (groupFilter !== "Todos" && e.grupo !== groupFilter) return false;
       if (search && !e.name.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
+    return sortByGroup(list);
   }, [allExercises, search, groupFilter]);
 
   function toggle(id) {

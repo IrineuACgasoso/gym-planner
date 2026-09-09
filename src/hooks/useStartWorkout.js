@@ -13,8 +13,13 @@ export function buildWorkoutInstance(chosen) {
 }
 
 export function useStartWorkout(setView) {
-  const { activeRoutine, allExercises, currentWorkout, startWorkout, updateRoutine, history } = useData();
+  const { activeRoutine, allExercises, currentWorkout, startWorkout, updateRoutine, history, skipWorkout } = useData();
   const [manualPickFor, setManualPickFor] = useState(null); // workout aguardando seleção manual
+
+  async function skipSequentialWorkout(workout) {
+    if (!workout) return;
+    await skipWorkout(activeRoutine, workout);
+  }
 
   async function beginWorkout(workout) {
     if (currentWorkout) { setView("workout"); return; }
@@ -72,5 +77,5 @@ export function useStartWorkout(setView) {
     return runnable[0];
   }
 
-  return { manualPickFor, setManualPickFor, beginWorkout, confirmManualSelection, pickRandomWorkout, pickNextSequentialWorkout, allExercises };
+  return { manualPickFor, setManualPickFor, beginWorkout, confirmManualSelection, pickRandomWorkout, pickNextSequentialWorkout, skipSequentialWorkout, allExercises };
 }

@@ -10,13 +10,18 @@ import { useStartWorkout } from "../hooks/useStartWorkout";
 export default function HomeView({ setView }) {
   const { activeRoutine, currentWorkout } = useData();
   const { user, logout } = useAuth();
-  const { manualPickFor, setManualPickFor, beginWorkout, confirmManualSelection, pickNextSequentialWorkout, allExercises } = useStartWorkout(setView);
+  const { manualPickFor, setManualPickFor, beginWorkout, confirmManualSelection, pickNextSequentialWorkout, skipSequentialWorkout, allExercises } = useStartWorkout(setView);
 
   async function handleIniciarTreino() {
     if (currentWorkout) { setView("workout"); return; }
     const workout = pickNextSequentialWorkout();
     if (!workout) { setView("chooseWorkout"); return; }
     await beginWorkout(workout);
+  }
+
+  async function handlePularTreino() {
+    if (currentWorkout || !nextWorkout) return;
+    await skipSequentialWorkout(nextWorkout);
   }
 
   const hasWorkouts = !!activeRoutine?.workouts?.length;
@@ -42,6 +47,12 @@ export default function HomeView({ setView }) {
               <div style={{ fontSize: 10.5, color: colors.babyBlue, fontWeight: 700, letterSpacing: 1 }}>● TREINO EM ANDAMENTO</div>
               <div style={{ fontSize: 13, color: colors.text, fontWeight: 600, marginTop: 2 }}>{currentWorkout.workoutTitle}</div>
             </div>
+          )}
+
+          {nextWorkout && (
+            <HomeButton onClick={handlePularTreino} style={{ padding: "10px 20px", fontSize: 12 }}>
+              ⏭ PULAR TREINO
+            </HomeButton>
           )}
 
           <HomeButton primary onClick={handleIniciarTreino} disabled={!hasWorkouts && !currentWorkout}>
@@ -74,6 +85,7 @@ export default function HomeView({ setView }) {
           workout={manualPickFor}
           allExercises={allExercises}
           onClose={() => setManualPickFor(null)}
+          onSkip={() => { setManualPickFor(null); skipSequentialWorkout(manualPickFor); }}
           onConfirm={ids => confirmManualSelection(manualPickFor, ids)}
         />
       )}
@@ -81,7 +93,7 @@ export default function HomeView({ setView }) {
   );
 }
 
-function HomeButton({ children, onClick, primary, outline, disabled }) {
+function HomeButton({ children, onClick, primary, outline, disabled, style }) {
   const base = {
     width: "100%", padding: "16px 20px", borderRadius: radius.md, cursor: disabled ? "not-allowed" : "pointer",
     fontFamily: font, fontWeight: 700, fontSize: 14, letterSpacing: 1, textAlign: "center",
@@ -92,7 +104,7 @@ function HomeButton({ children, onClick, primary, outline, disabled }) {
     : outline
       ? { background: "transparent", color: colors.babyBlue, border: `1.5px solid ${colors.accentSoft}` }
       : { background: colors.bgElevated2, color: colors.text, border: `1.5px solid ${colors.border}` };
-  return <button onClick={onClick} disabled={disabled} style={{ ...base, ...variant }}>{children}</button>;
+  return <button onClick={onClick} disabled={disabled} style={{ ...base, ...variant, ...style }}>{children}</button>;
 }
 
 function ProfileAvatar({ user, onLogout }) {
