@@ -23,8 +23,8 @@ export default function RoutinesView() {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-        <h2 style={{ fontSize: 16, color: colors.text, fontWeight: 700 }}>MINHAS ROTINAS</h2>
-        <Button onClick={() => setShowNew(true)} style={{ padding: "8px 14px", fontSize: 12 }}>+ NOVA ROTINA</Button>
+        <h2 style={{ fontSize: 19, color: colors.text, fontWeight: 700 }}>MINHAS ROTINAS</h2>
+        <Button onClick={() => setShowNew(true)} style={{ padding: "8px 14px", fontSize: 14.5 }}>+ NOVA ROTINA</Button>
       </div>
 
       {!routines.length && (
@@ -36,18 +36,18 @@ export default function RoutinesView() {
           <Card key={r.id} style={{ borderColor: r.id === activeRoutineId ? colors.accent : colors.border }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
               <div>
-                <div style={{ fontSize: 15.5, fontWeight: 700, color: colors.text }}>{r.name}</div>
-                <div style={{ fontSize: 11.5, color: colors.textMuted, marginTop: 2 }}>{r.workouts?.length || 0} treino(s)</div>
+                <div style={{ fontSize: 18.5, fontWeight: 700, color: colors.text }}>{r.name}</div>
+                <div style={{ fontSize: 14, color: colors.textMuted, marginTop: 2 }}>{r.workouts?.length || 0} treino(s)</div>
               </div>
               {r.id === activeRoutineId && <Tag tone="success">ATIVA</Tag>}
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {r.id !== activeRoutineId && (
-                <Button variant="secondary" onClick={() => switchRoutine(r.id)} style={{ flex: 1, padding: "9px 10px", fontSize: 11.5 }}>USAR ESTA</Button>
+                <Button variant="secondary" onClick={() => switchRoutine(r.id)} style={{ flex: 1, padding: "9px 10px", fontSize: 14 }}>USAR ESTA</Button>
               )}
-              <Button variant="secondary" onClick={() => setEditingRoutine(r)} style={{ flex: 1, padding: "9px 10px", fontSize: 11.5 }}>GERENCIAR TREINOS</Button>
-              <Button variant="ghost" onClick={() => setRenaming(r)} style={{ padding: "9px 10px", fontSize: 11.5 }}>✎</Button>
-              <Button variant="danger" onClick={() => { if (confirm(`Excluir a rotina "${r.name}"?`)) removeRoutine(r.id); }} style={{ padding: "9px 10px", fontSize: 11.5 }}>🗑</Button>
+              <Button variant="secondary" onClick={() => setEditingRoutine(r)} style={{ flex: 1, padding: "9px 10px", fontSize: 14 }}>GERENCIAR TREINOS</Button>
+              <Button variant="ghost" onClick={() => setRenaming(r)} style={{ padding: "9px 10px", fontSize: 14 }}>✎</Button>
+              <Button variant="danger" onClick={() => { if (confirm(`Excluir a rotina "${r.name}"?`)) removeRoutine(r.id); }} style={{ padding: "9px 10px", fontSize: 14 }}>🗑</Button>
             </div>
           </Card>
         ))}
@@ -122,14 +122,14 @@ function RoutineWorkoutsModal({ routine, onClose, onSave }) {
             padding: 12, display: "flex", justifyContent: "space-between", alignItems: "center",
           }}>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: colors.text }}>{w.title}</div>
-              <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 2 }}>
+              <div style={{ fontSize: 17, fontWeight: 700, color: colors.text }}>{w.title}</div>
+              <div style={{ fontSize: 13, color: colors.textMuted, marginTop: 2 }}>
                 {w.exerciseIds.length} exercício(s){w.shuffle ? ` · sorteia ${sumSmartCount(w)}` : ""}
               </div>
             </div>
             <div style={{ display: "flex", gap: 6 }}>
-              <Button variant="ghost" onClick={() => setEditingWorkout(w)} style={{ padding: "7px 10px", fontSize: 11 }}>✎</Button>
-              <Button variant="danger" onClick={() => deleteWorkout(w.id)} style={{ padding: "7px 10px", fontSize: 11 }}>🗑</Button>
+              <Button variant="ghost" onClick={() => setEditingWorkout(w)} style={{ padding: "7px 10px", fontSize: 13 }}>✎</Button>
+              <Button variant="danger" onClick={() => deleteWorkout(w.id)} style={{ padding: "7px 10px", fontSize: 13 }}>🗑</Button>
             </div>
           </div>
         ))}
@@ -191,39 +191,39 @@ function WorkoutEditor({ workout, onCancel, onSave }) {
 
       <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, cursor: "pointer" }}>
         <input type="checkbox" checked={shuffle} onChange={e => setShuffle(e.target.checked)} style={{ width: 18, height: 18, accentColor: colors.accent }} />
-        <span style={{ fontSize: 12.5, color: colors.text }}>🔀 Sortear exercícios automaticamente (modo inteligente)</span>
+        <span style={{ fontSize: 15, color: colors.text }}>🔀 Sortear exercícios automaticamente (modo inteligente)</span>
       </label>
 
       {shuffle && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 6 }}>
             QUANTOS EXERCÍCIOS DE CADA SUBGRUPO
           </div>
           {!subgroupsInPool.length && (
-            <div style={{ fontSize: 11.5, color: colors.textMuted, marginBottom: 8 }}>
+            <div style={{ fontSize: 14, color: colors.textMuted, marginBottom: 8 }}>
               Selecione exercícios com subgrupo no pool abaixo para configurar.
             </div>
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {subgroupsInPool.map(sg => (
               <div key={sg} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 12, color: colors.text, flex: 1 }}>{sg}</span>
+                <span style={{ fontSize: 14.5, color: colors.text, flex: 1 }}>{sg}</span>
                 <Input type="number" min={0} value={countFor(sg)} onChange={e => setCountFor(sg, e.target.value)}
-                  style={{ width: 64, padding: "7px 8px", fontSize: 12.5, textAlign: "center" }} />
+                  style={{ width: 64, padding: "7px 8px", fontSize: 15, textAlign: "center" }} />
               </div>
             ))}
           </div>
           {hasFreePool && (
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
-              <span style={{ fontSize: 12, color: colors.text, flex: 1 }}>Sem subgrupo (ex: Cardio)</span>
+              <span style={{ fontSize: 14.5, color: colors.text, flex: 1 }}>Sem subgrupo (ex: Cardio)</span>
               <Input type="number" min={0} value={freeCount} onChange={e => setFreeCount(Math.max(0, Number(e.target.value) || 0))}
-                style={{ width: 64, padding: "7px 8px", fontSize: 12.5, textAlign: "center" }} />
+                style={{ width: 64, padding: "7px 8px", fontSize: 15, textAlign: "center" }} />
             </div>
           )}
         </div>
       )}
 
-      <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6, marginTop: 4 }}>
+      <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 6, marginTop: 4 }}>
         SELECIONE OS EXERCÍCIOS DO POOL ({exerciseIds.length} selecionados)
       </div>
       <ExercisePicker selectedIds={exerciseIds} onChange={setExerciseIds} />

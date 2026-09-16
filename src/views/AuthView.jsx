@@ -24,15 +24,15 @@ export default function AuthView() {
       minHeight: "100vh", background: colors.bg, display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", padding: 24, fontFamily: font,
     }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');`}</style>
 
       <div style={{ textAlign: "center", marginBottom: 30 }}>
         <div style={{
-          fontSize: 30, fontWeight: 700, letterSpacing: 5,
+          fontSize: 36, fontWeight: 700, letterSpacing: 5,
           backgroundImage: gradients.primary, WebkitBackgroundClip: "text", backgroundClip: "text",
           color: "transparent", filter: `drop-shadow(0 0 14px rgba(63,169,245,0.35))`,
         }}>⚡ GYMFLOW</div>
-        <div style={{ fontSize: 11, color: colors.textFaint, letterSpacing: 2, marginTop: 6 }}>
+        <div style={{ fontSize: 13, color: colors.textFaint, letterSpacing: 2, marginTop: 6 }}>
           SEU GESTOR DE TREINOS PESSOAL
         </div>
       </div>
@@ -46,7 +46,7 @@ export default function AuthView() {
           {["login", "signup"].map(m => (
             <button key={m} type="button" onClick={() => { setMode(m); setError(null); }} style={{
               flex: 1, padding: "9px 0", borderRadius: radius.pill, border: "none", cursor: "pointer",
-              fontFamily: font, fontWeight: 700, fontSize: 12, letterSpacing: 0.8,
+              fontFamily: font, fontWeight: 700, fontSize: 14.5, letterSpacing: 0.8,
               background: mode === m ? gradients.primary : "transparent",
               color: mode === m ? "#03101F" : colors.textMuted,
             }}>{m === "login" ? "ENTRAR" : "CRIAR CONTA"}</button>
@@ -66,7 +66,7 @@ export default function AuthView() {
         </div>
 
         {error && (
-          <div style={{ color: colors.danger, fontSize: 12.5, marginBottom: 14, textAlign: "center" }}>{error}</div>
+          <div style={{ color: colors.danger, fontSize: 15, marginBottom: 14, textAlign: "center" }}>{error}</div>
         )}
 
         <Button type="submit" disabled={busy} style={{ width: "100%" }}>

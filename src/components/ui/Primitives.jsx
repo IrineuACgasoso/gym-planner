@@ -31,7 +31,7 @@ export function Tag({ children, tone = "accent", style }) {
     <span style={{
       display: "inline-flex", alignItems: "center", gap: 4,
       background: t.bg, border: `1px solid ${t.border}`, color: t.color,
-      fontSize: 10, fontWeight: 600, letterSpacing: 0.6,
+      fontSize: 12, fontWeight: 600, letterSpacing: 0.6,
       padding: "3px 9px", borderRadius: radius.pill, fontFamily: font,
       ...style,
     }}>{children}</span>
@@ -51,7 +51,7 @@ export function Button({ children, onClick, variant = "primary", style, disabled
       onClick={onClick}
       disabled={disabled}
       style={{
-        fontFamily: font, fontWeight: 700, fontSize: 13, letterSpacing: 0.8,
+        fontFamily: font, fontWeight: 700, fontSize: 15.5, letterSpacing: 0.8,
         padding: "12px 18px", borderRadius: radius.md, cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.5 : 1, transition: "transform .12s ease, opacity .12s ease",
         ...variants[variant], ...style,
@@ -67,7 +67,7 @@ export function Input({ style, ...props }) {
       style={{
         width: "100%", background: colors.bgInput, border: `1px solid ${colors.border}`,
         color: colors.text, borderRadius: radius.sm, padding: "11px 13px",
-        fontSize: 14, fontFamily: font, ...style,
+        fontSize: 17, fontFamily: font, ...style,
       }}
     />
   );
@@ -80,7 +80,7 @@ export function Select({ style, children, ...props }) {
       style={{
         width: "100%", background: colors.bgInput, border: `1px solid ${colors.border}`,
         color: colors.text, borderRadius: radius.sm, padding: "11px 13px",
-        fontSize: 14, fontFamily: font, ...style,
+        fontSize: 17, fontFamily: font, ...style,
       }}
     >{children}</select>
   );
@@ -110,10 +110,10 @@ export function Overlay({ onClose, children, title, size = "md" }) {
         <div style={{ padding: "20px 20px 0 20px" }}>
           {title && (
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, letterSpacing: 0.5 }}>{title}</h2>
+              <h2 style={{ fontSize: 21.5, fontWeight: 700, color: colors.text, letterSpacing: 0.5 }}>{title}</h2>
               <button onClick={onClose} style={{
                 background: colors.bgInput, border: `1px solid ${colors.border}`, color: colors.textMuted,
-                width: 30, height: 30, borderRadius: radius.pill, cursor: "pointer", fontSize: 14,
+                width: 30, height: 30, borderRadius: radius.pill, cursor: "pointer", fontSize: 17,
               }}>✕</button>
             </div>
           )}
@@ -129,9 +129,9 @@ export function Overlay({ onClose, children, title, size = "md" }) {
 export function EmptyState({ icon = "📭", title, subtitle, action }) {
   return (
     <div style={{ textAlign: "center", padding: "40px 20px", color: colors.textMuted }}>
-      <div style={{ fontSize: 38, marginBottom: 10 }}>{icon}</div>
-      <div style={{ fontSize: 15, fontWeight: 600, color: colors.text, marginBottom: 4 }}>{title}</div>
-      {subtitle && <div style={{ fontSize: 12.5, marginBottom: 16 }}>{subtitle}</div>}
+      <div style={{ fontSize: 45.5, marginBottom: 10 }}>{icon}</div>
+      <div style={{ fontSize: 18, fontWeight: 600, color: colors.text, marginBottom: 4 }}>{title}</div>
+      {subtitle && <div style={{ fontSize: 15, marginBottom: 16 }}>{subtitle}</div>}
       {action}
     </div>
   );

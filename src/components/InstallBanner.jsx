@@ -46,21 +46,21 @@ export default function InstallBanner() {
       background: colors.bgElevated2, border: `1px solid ${colors.accent}`, borderRadius: radius.lg,
       padding: 12, display: "flex", alignItems: "center", gap: 10, boxShadow: shadows.glow, fontFamily: font,
     }}>
-      <div style={{ fontSize: 22 }}>📲</div>
+      <div style={{ fontSize: 26.5 }}>📲</div>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 12.5, fontWeight: 700, color: colors.text }}>Instale o GymFlow</div>
-        <div style={{ fontSize: 10.5, color: colors.textMuted, marginTop: 1 }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: colors.text }}>Instale o GymFlow</div>
+        <div style={{ fontSize: 12.5, color: colors.textMuted, marginTop: 1 }}>
           {showIosHint ? "Toque em Compartilhar → \"Adicionar à Tela de Início\"" : "Use como app, sem precisar do navegador."}
         </div>
       </div>
       {!showIosHint && (
         <button onClick={handleInstall} style={{
           background: gradients.primary, border: "none", color: "#03101F", fontWeight: 700,
-          fontSize: 11, padding: "8px 12px", borderRadius: radius.sm, cursor: "pointer", fontFamily: font,
+          fontSize: 13, padding: "8px 12px", borderRadius: radius.sm, cursor: "pointer", fontFamily: font,
         }}>INSTALAR</button>
       )}
       <button onClick={dismiss} style={{
-        background: "none", border: "none", color: colors.textFaint, fontSize: 16, cursor: "pointer", padding: 4,
+        background: "none", border: "none", color: colors.textFaint, fontSize: 19, cursor: "pointer", padding: 4,
       }}>✕</button>
     </div>
   );

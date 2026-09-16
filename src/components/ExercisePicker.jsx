@@ -34,7 +34,7 @@ export default function ExercisePicker({ selectedIds, onChange }) {
 
       <div style={{ maxHeight: 260, overflowY: "auto", border: `1px solid ${colors.border}`, borderRadius: radius.md }}>
         {!filtered.length && (
-          <div style={{ padding: 16, textAlign: "center", color: colors.textMuted, fontSize: 12.5 }}>Nenhum exercício encontrado.</div>
+          <div style={{ padding: 16, textAlign: "center", color: colors.textMuted, fontSize: 15 }}>Nenhum exercício encontrado.</div>
         )}
         {filtered.map(e => {
           const checked = selectedIds.includes(e.id);
@@ -46,10 +46,10 @@ export default function ExercisePicker({ selectedIds, onChange }) {
             }}>
               <input type="checkbox" checked={checked} readOnly style={{ width: 17, height: 17, accentColor: colors.accent }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, color: colors.text, fontWeight: 600 }}>{e.name}</div>
+                <div style={{ fontSize: 15.5, color: colors.text, fontWeight: 600 }}>{e.name}</div>
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 3 }}>
-                  <Tag tone="muted" style={{ fontSize: 9 }}>{e.grupo}</Tag>
-                  {e.subgrupos?.slice(0, 2).map(s => <Tag key={s} style={{ fontSize: 9 }}>{s}</Tag>)}
+                  <Tag tone="muted" style={{ fontSize: 11 }}>{e.grupo}</Tag>
+                  {e.subgrupos?.slice(0, 2).map(s => <Tag key={s} style={{ fontSize: 11 }}>{s}</Tag>)}
                 </div>
               </div>
             </label>

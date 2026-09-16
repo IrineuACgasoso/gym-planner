@@ -36,7 +36,7 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <button onClick={() => shiftMonth(-1)} style={navBtn}>‹</button>
-        <div style={{ fontSize: 14, fontWeight: 700, color: colors.text, letterSpacing: 0.5 }}>
+        <div style={{ fontSize: 17, fontWeight: 700, color: colors.text, letterSpacing: 0.5 }}>
           {MONTHS[month]} {year}
         </div>
         <button onClick={() => shiftMonth(1)} style={navBtn}>›</button>
@@ -44,7 +44,7 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 3, marginBottom: 4 }}>
         {WEEKDAYS.map((w, i) => (
-          <div key={i} style={{ textAlign: "center", fontSize: 10, color: colors.textFaint, fontWeight: 700 }}>{w}</div>
+          <div key={i} style={{ textAlign: "center", fontSize: 12, color: colors.textFaint, fontWeight: 700 }}>{w}</div>
         ))}
       </div>
 
@@ -69,7 +69,7 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
               position: "relative", width: "100%", minWidth: 0, overflow: "hidden",
             }}>
               <span style={{
-                fontSize: 12, fontWeight: marked ? 700 : 500, lineHeight: 1,
+                fontSize: 14.5, fontWeight: marked ? 700 : 500, lineHeight: 1,
                 color: marked ? colors.babyBlue : isToday ? colors.text : colors.textMuted,
               }}>{d}</span>
 
@@ -79,7 +79,7 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
                     <div key={wi} style={{ display: "flex", alignItems: "center", gap: 2, width: "100%", minWidth: 0 }}>
                       <div style={{ width: 4, height: 4, borderRadius: 4, background: colors.cyan, flexShrink: 0 }} />
                       <span style={{
-                        fontSize: 8.5, fontWeight: 600, color: colors.babyBlue, lineHeight: 1.2, minWidth: 0, flex: 1,
+                        fontSize: 10, fontWeight: 600, color: colors.babyBlue, lineHeight: 1.2, minWidth: 0, flex: 1,
                         textAlign: "left",
                         whiteSpace: isSelected ? "normal" : "nowrap",
                         overflow: isSelected ? "visible" : "hidden",
@@ -89,7 +89,7 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
                     </div>
                   ))}
                   {!isSelected && hiddenCount > 0 && (
-                    <span style={{ fontSize: 8, color: colors.textFaint, textAlign: "left", paddingLeft: 6 }}>+{hiddenCount}</span>
+                    <span style={{ fontSize: 9.5, color: colors.textFaint, textAlign: "left", paddingLeft: 6 }}>+{hiddenCount}</span>
                   )}
                 </div>
               )}
@@ -103,5 +103,5 @@ export default function Calendar({ markedDates, onSelectDate, selectedDate }) {
 
 const navBtn = {
   background: colors.bgInput, border: `1px solid ${colors.border}`, color: colors.text,
-  width: 30, height: 30, borderRadius: radius.pill, cursor: "pointer", fontSize: 16,
+  width: 30, height: 30, borderRadius: radius.pill, cursor: "pointer", fontSize: 19,
 };

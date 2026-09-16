@@ -123,11 +123,11 @@ export default function ActiveWorkoutView({ setView }) {
         marginBottom: 6, position: "sticky", top: 0, zIndex: 10, background: colors.bg, padding: "4px 0 10px",
       }}>
         <div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: colors.text }}>{currentWorkout.workoutTitle}</div>
-          <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 2 }}>{doneCount}/{total} concluídos</div>
+          <div style={{ fontSize: 21.5, fontWeight: 700, color: colors.text }}>{currentWorkout.workoutTitle}</div>
+          <div style={{ fontSize: 13, color: colors.textMuted, marginTop: 2 }}>{doneCount}/{total} concluídos</div>
         </div>
         <button onClick={() => setConfirmCancel(true)} style={{
-          background: "none", border: "none", color: colors.textFaint, fontSize: 10.5,
+          background: "none", border: "none", color: colors.textFaint, fontSize: 12.5,
           fontWeight: 700, cursor: "pointer", letterSpacing: 0.5, padding: "6px 0",
         }}>✕ ANULAR TREINO</button>
       </div>
@@ -137,7 +137,7 @@ export default function ActiveWorkoutView({ setView }) {
           background: colors.bgElevated, border: `1px solid ${colors.danger}`, borderRadius: radius.lg,
           padding: 14, marginBottom: 14,
         }}>
-          <div style={{ fontSize: 13, color: colors.text, marginBottom: 12 }}>
+          <div style={{ fontSize: 15.5, color: colors.text, marginBottom: 12 }}>
             Anular este treino? Todo o progresso preenchido será perdido e nada será salvo no calendário.
           </div>
           <div style={{ display: "flex", gap: 10 }}>
@@ -152,7 +152,7 @@ export default function ActiveWorkoutView({ setView }) {
           background: colors.bgElevated, border: `1px solid ${colors.accent}`, borderRadius: radius.lg,
           padding: 14, marginBottom: 14,
         }}>
-          <div style={{ fontSize: 13, color: colors.text, marginBottom: 12 }}>
+          <div style={{ fontSize: 15.5, color: colors.text, marginBottom: 12 }}>
             Ainda faltam {total - doneCount} exercício(s) sem marcar como concluído. Finalizar mesmo assim?
           </div>
           <div style={{ display: "flex", gap: 10 }}>
@@ -183,7 +183,7 @@ export default function ActiveWorkoutView({ setView }) {
                   style={{ width: 22, height: 22, accentColor: colors.accent, flexShrink: 0, borderRadius: "50%" }}
                 />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14.5, fontWeight: 700, color: colors.text, textDecoration: ex.done ? "line-through" : "none" }}>
+                  <div style={{ fontSize: 17.5, fontWeight: 700, color: colors.text, textDecoration: ex.done ? "line-through" : "none" }}>
                     {ex.name}
                   </div>
                   {isOpen && (
@@ -197,10 +197,10 @@ export default function ActiveWorkoutView({ setView }) {
                   <button onClick={e => { e.stopPropagation(); handleReroll(idx); }} title="Sortear outro exercício"
                     style={{
                       background: colors.bgInput, border: `1px solid ${colors.border}`, color: colors.babyBlue,
-                      width: 28, height: 28, borderRadius: radius.pill, cursor: "pointer", fontSize: 12, flexShrink: 0,
+                      width: 28, height: 28, borderRadius: radius.pill, cursor: "pointer", fontSize: 14.5, flexShrink: 0,
                     }}>🔀</button>
                 )}
-                <span style={{ color: colors.textFaint, fontSize: 12, transform: isOpen ? "rotate(90deg)" : "none", transition: "transform .15s" }}>›</span>
+                <span style={{ color: colors.textFaint, fontSize: 14.5, transform: isOpen ? "rotate(90deg)" : "none", transition: "transform .15s" }}>›</span>
               </div>
 
               {isOpen && (
@@ -221,19 +221,19 @@ export default function ActiveWorkoutView({ setView }) {
                     <div>
                       {ex.sets.map((s, si) => (
                         <div key={si} style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }}>
-                          <span style={{ fontSize: 11, color: colors.textFaint, width: 16 }}>{si + 1}</span>
+                          <span style={{ fontSize: 13, color: colors.textFaint, width: 16 }}>{si + 1}</span>
                           <Field label="Reps" value={s.reps} onChange={v => patchSet(idx, si, { reps: v })} small
                             onFocus={e => (lastFocusedRef.current = e.target)} />
                           <Field label="Peso (kg)" value={s.peso} onChange={v => patchSet(idx, si, { peso: v })} small
                             onFocus={e => (lastFocusedRef.current = e.target)} />
                           <button onClick={() => deleteSet(idx, si)} title="Excluir série" style={{
                             background: "none", border: "none", color: colors.danger, cursor: "pointer",
-                            fontSize: 15, padding: "4px 6px", lineHeight: 1,
+                            fontSize: 18, padding: "4px 6px", lineHeight: 1,
                           }}>🗑</button>
                         </div>
                       ))}
                       <button onClick={() => addSet(idx)} style={{
-                        background: "none", border: "none", color: colors.babyBlue, fontSize: 11.5,
+                        background: "none", border: "none", color: colors.babyBlue, fontSize: 14,
                         fontWeight: 700, cursor: "pointer", padding: "4px 0",
                       }}>+ ADICIONAR SÉRIE</button>
                     </div>
@@ -252,7 +252,7 @@ export default function ActiveWorkoutView({ setView }) {
       }}>
         <button onClick={handleFinish} style={{
           width: "100%", padding: "16px 0", borderRadius: radius.md, border: "none", cursor: "pointer",
-          background: gradients.primary, color: "#03101F", fontWeight: 700, fontSize: 14, letterSpacing: 1,
+          background: gradients.primary, color: "#03101F", fontWeight: 700, fontSize: 17, letterSpacing: 1,
         }}>✔ FINALIZAR TREINO</button>
       </div>
     </div>
@@ -266,9 +266,9 @@ function Field({ label, value, onChange, small, mask, onFocus }) {
   }
   return (
     <div style={{ flex: 1 }}>
-      {!small && <div style={{ fontSize: 10, color: colors.textFaint, marginBottom: 3 }}>{label}</div>}
+      {!small && <div style={{ fontSize: 12, color: colors.textFaint, marginBottom: 3 }}>{label}</div>}
       <Input placeholder={label} value={value} onChange={handleChange} onFocus={onFocus}
-        inputMode={mask === "time" ? "numeric" : "decimal"} style={{ padding: "8px 10px", fontSize: 13 }} />
+        inputMode={mask === "time" ? "numeric" : "decimal"} style={{ padding: "8px 10px", fontSize: 15.5 }} />
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function ExercisesView({ setView }) {
       <TopBar
         title="BANCO DE EXERCÍCIOS"
         onBack={() => setView("home")}
-        right={<Button onClick={() => setShowNew(true)} style={{ padding: "8px 14px", fontSize: 12 }}>+ NOVO</Button>}
+        right={<Button onClick={() => setShowNew(true)} style={{ padding: "8px 14px", fontSize: 14.5 }}>+ NOVO</Button>}
       />
 
       <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
@@ -41,7 +41,7 @@ export default function ExercisesView({ setView }) {
           <Card key={e.id} style={{ padding: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: colors.text }}>{e.name}</div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: colors.text }}>{e.name}</div>
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 6 }}>
                   <Tag tone="muted">{e.grupo}</Tag>
                   {e.subgrupos?.map(s => <Tag key={s}>{s}</Tag>)}
@@ -50,8 +50,8 @@ export default function ExercisesView({ setView }) {
               </div>
               {e.custom && (
                 <div style={{ display: "flex", gap: 6 }}>
-                  <Button variant="ghost" onClick={() => setEditing(e)} style={{ padding: "6px 9px", fontSize: 11 }}>✎</Button>
-                  <Button variant="danger" onClick={() => { if (confirm(`Excluir "${e.name}"?`)) removeExercise(e.id); }} style={{ padding: "6px 9px", fontSize: 11 }}>🗑</Button>
+                  <Button variant="ghost" onClick={() => setEditing(e)} style={{ padding: "6px 9px", fontSize: 13 }}>✎</Button>
+                  <Button variant="danger" onClick={() => { if (confirm(`Excluir "${e.name}"?`)) removeExercise(e.id); }} style={{ padding: "6px 9px", fontSize: 13 }}>🗑</Button>
                 </div>
               )}
             </div>
@@ -105,19 +105,19 @@ function ExerciseForm({ exercise, onClose, onSave }) {
   return (
     <Overlay title={exercise ? "Editar Exercício" : "Novo Exercício"} onClose={onClose} size="lg">
       <div style={{ marginBottom: 12 }}>
-        <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 4 }}>Nome</div>
+        <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 4 }}>Nome</div>
         <Input placeholder="Ex: Crucifixo na Polia" value={name} onChange={e => setName(e.target.value)} autoFocus />
       </div>
 
       <div style={{ marginBottom: 12 }}>
-        <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 4 }}>Grupo Muscular</div>
+        <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 4 }}>Grupo Muscular</div>
         <Select value={grupo} onChange={e => { setGrupo(e.target.value); setSubgrupos([]); setExtraSubgroups([]); }}>
           {MUSCLE_GROUPS.map(g => <option key={g}>{g}</option>)}
         </Select>
       </div>
 
       <div style={{ marginBottom: 6 }}>
-        <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6 }}>
+        <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 6 }}>
           Subgrupo(s) — deixe vazio se não for necessário garantir cobertura
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
@@ -128,7 +128,7 @@ function ExerciseForm({ exercise, onClose, onSave }) {
                 background: active ? colors.tagBg : colors.bgInput,
                 border: `1px solid ${active ? colors.accent : colors.border}`,
                 color: active ? colors.babyBlue : colors.textMuted,
-                padding: "6px 11px", borderRadius: radius.pill, fontSize: 11.5, cursor: "pointer",
+                padding: "6px 11px", borderRadius: radius.pill, fontSize: 14, cursor: "pointer",
               }}>{s}</button>
             );
           })}
@@ -142,13 +142,13 @@ function ExerciseForm({ exercise, onClose, onSave }) {
                 onChange={e => setNewSubName(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter") confirmNewSub(); if (e.key === "Escape") { setAddingSub(false); setNewSubName(""); } }}
                 onBlur={confirmNewSub}
-                style={{ width: 140, padding: "6px 9px", fontSize: 11.5 }}
+                style={{ width: 140, padding: "6px 9px", fontSize: 14 }}
               />
             </div>
           ) : (
             <button type="button" onClick={() => setAddingSub(true)} title="Adicionar subgrupo" style={{
               background: colors.bgInput, border: `1px dashed ${colors.border}`, color: colors.babyBlue,
-              width: 28, height: 28, borderRadius: radius.pill, cursor: "pointer", fontSize: 15, fontWeight: 700,
+              width: 28, height: 28, borderRadius: radius.pill, cursor: "pointer", fontSize: 18, fontWeight: 700,
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>+</button>
           )}

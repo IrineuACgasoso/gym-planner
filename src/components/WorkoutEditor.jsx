@@ -51,39 +51,39 @@ export default function WorkoutEditor({ workout, onCancel, onSave }) {
 
       <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, cursor: "pointer" }}>
         <input type="checkbox" checked={shuffle} onChange={e => setShuffle(e.target.checked)} style={{ width: 18, height: 18, accentColor: colors.accent }} />
-        <span style={{ fontSize: 12.5, color: colors.text }}>🔀 Sortear exercícios automaticamente (modo inteligente)</span>
+        <span style={{ fontSize: 15, color: colors.text }}>🔀 Sortear exercícios automaticamente (modo inteligente)</span>
       </label>
 
       {shuffle && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6 }}>
+          <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 6 }}>
             QUANTOS EXERCÍCIOS DE CADA SUBGRUPO
           </div>
           {!subgroupsInPool.length && (
-            <div style={{ fontSize: 11.5, color: colors.textMuted, marginBottom: 8 }}>
+            <div style={{ fontSize: 14, color: colors.textMuted, marginBottom: 8 }}>
               Selecione exercícios com subgrupo no pool abaixo para configurar.
             </div>
           )}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {subgroupsInPool.map(sg => (
               <div key={sg} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 12, color: colors.text, flex: 1 }}>{sg}</span>
+                <span style={{ fontSize: 14.5, color: colors.text, flex: 1 }}>{sg}</span>
                 <Input type="number" min={0} value={countFor(sg)} onChange={e => setCountFor(sg, e.target.value)}
-                  style={{ width: 64, padding: "7px 8px", fontSize: 12.5, textAlign: "center" }} />
+                  style={{ width: 64, padding: "7px 8px", fontSize: 15, textAlign: "center" }} />
               </div>
             ))}
           </div>
           {hasFreePool && (
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
-              <span style={{ fontSize: 12, color: colors.text, flex: 1 }}>Sem subgrupo (ex: Cardio)</span>
+              <span style={{ fontSize: 14.5, color: colors.text, flex: 1 }}>Sem subgrupo (ex: Cardio)</span>
               <Input type="number" min={0} value={freeCount} onChange={e => setFreeCount(Math.max(0, Number(e.target.value) || 0))}
-                style={{ width: 64, padding: "7px 8px", fontSize: 12.5, textAlign: "center" }} />
+                style={{ width: 64, padding: "7px 8px", fontSize: 15, textAlign: "center" }} />
             </div>
           )}
         </div>
       )}
 
-      <div style={{ fontSize: 11, color: colors.textFaint, marginBottom: 6, marginTop: 4 }}>
+      <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 6, marginTop: 4 }}>
         SELECIONE OS EXERCÍCIOS DO POOL ({exerciseIds.length} selecionados)
       </div>
       <ExercisePicker selectedIds={exerciseIds} onChange={setExerciseIds} />

@@ -31,7 +31,7 @@ export const colors = {
   tagBorder: "#1B3A5C",
 };
 
-export const font = "'Rajdhani', sans-serif";
+export const font = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
 export const shadows = {
   glow: "0 0 24px rgba(63,169,245,0.25)",

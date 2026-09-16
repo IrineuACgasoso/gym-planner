@@ -43,11 +43,11 @@ function LoadingScreen() {
     }}>
       <GlobalStyle />
       <div style={{
-        fontSize: 30, fontWeight: 700, letterSpacing: 5,
+        fontSize: 36, fontWeight: 700, letterSpacing: 5,
         backgroundImage: "linear-gradient(135deg, #7FD4FF 0%, #3FA9F5 45%, #0B3D91 100%)",
         WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent",
       }}>⚡ GYMFLOW</div>
-      <div style={{ fontSize: 11, color: colors.textFaint, letterSpacing: 2 }}>CARREGANDO...</div>
+      <div style={{ fontSize: 13, color: colors.textFaint, letterSpacing: 2 }}>CARREGANDO...</div>
     </div>
   );
 }
@@ -55,7 +55,7 @@ function LoadingScreen() {
 function GlobalStyle() {
   return (
     <style>{`
-      @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
       * { box-sizing: border-box; margin: 0; padding: 0; }
       ::-webkit-scrollbar { width: 3px; }
       ::-webkit-scrollbar-thumb { background: ${colors.border}; border-radius: 2px; }

@@ -44,13 +44,13 @@ export default function HomeView({ setView }) {
               background: colors.bgElevated2, border: `1px solid ${colors.accent}`, borderRadius: radius.lg,
               padding: "10px 16px", marginBottom: 4, textAlign: "center",
             }}>
-              <div style={{ fontSize: 10.5, color: colors.babyBlue, fontWeight: 700, letterSpacing: 1 }}>● TREINO EM ANDAMENTO</div>
-              <div style={{ fontSize: 13, color: colors.text, fontWeight: 600, marginTop: 2 }}>{currentWorkout.workoutTitle}</div>
+              <div style={{ fontSize: 12.5, color: colors.babyBlue, fontWeight: 700, letterSpacing: 1 }}>● TREINO EM ANDAMENTO</div>
+              <div style={{ fontSize: 15.5, color: colors.text, fontWeight: 600, marginTop: 2 }}>{currentWorkout.workoutTitle}</div>
             </div>
           )}
 
           {nextWorkout && (
-            <HomeButton onClick={handlePularTreino} style={{ padding: "10px 20px", fontSize: 12 }}>
+            <HomeButton onClick={handlePularTreino} style={{ width: "auto", alignSelf: "center", padding: "8px 18px", fontSize: 14.5 }}>
               ⏭ PULAR TREINO
             </HomeButton>
           )}
@@ -59,7 +59,7 @@ export default function HomeView({ setView }) {
             {currentWorkout ? "▶ CONTINUAR TREINO" : "▶ INICIAR TREINO"}
           </HomeButton>
           {nextWorkout && (
-            <div style={{ fontSize: 13.5, color: colors.text, textAlign: "center", marginTop: -6 }}>
+            <div style={{ fontSize: 16, color: colors.text, textAlign: "center", marginTop: -6 }}>
               Próximo: <span style={{ color: colors.babyBlue, fontWeight: 700 }}>{nextWorkout.title}</span>
             </div>
           )}
@@ -96,7 +96,7 @@ export default function HomeView({ setView }) {
 function HomeButton({ children, onClick, primary, outline, disabled, style }) {
   const base = {
     width: "100%", padding: "16px 20px", borderRadius: radius.md, cursor: disabled ? "not-allowed" : "pointer",
-    fontFamily: font, fontWeight: 700, fontSize: 14, letterSpacing: 1, textAlign: "center",
+    fontFamily: font, fontWeight: 700, fontSize: 17, letterSpacing: 1, textAlign: "center",
     opacity: disabled ? 0.4 : 1,
   };
   const variant = primary
@@ -115,7 +115,7 @@ function ProfileAvatar({ user, onLogout }) {
       <button onClick={() => setOpen(o => !o)} style={{
         width: 38, height: 38, borderRadius: radius.pill,
         border: `1px solid ${colors.border}`, background: gradients.primary, color: "#03101F",
-        fontWeight: 700, fontSize: 15, cursor: "pointer", display: "flex",
+        fontWeight: 700, fontSize: 18, cursor: "pointer", display: "flex",
         alignItems: "center", justifyContent: "center", boxShadow: shadows.glow,
       }}>{initial}</button>
       {open && (
@@ -126,14 +126,14 @@ function ProfileAvatar({ user, onLogout }) {
             border: `1px solid ${colors.border}`, borderRadius: radius.md, padding: 8,
             minWidth: 170, zIndex: 90, boxShadow: shadows.card,
           }}>
-            <div style={{ padding: "6px 10px", fontSize: 12, color: colors.text, fontWeight: 700 }}>
+            <div style={{ padding: "6px 10px", fontSize: 14.5, color: colors.text, fontWeight: 700 }}>
               {user?.displayName || "Usuário"}
             </div>
-            <div style={{ padding: "0 10px 8px", fontSize: 10.5, color: colors.textFaint }}>{user?.email}</div>
+            <div style={{ padding: "0 10px 8px", fontSize: 12.5, color: colors.textFaint }}>{user?.email}</div>
             <button onClick={onLogout} style={{
               width: "100%", textAlign: "left", background: "rgba(255,93,108,0.1)", border: "none",
               color: colors.danger, padding: "8px 10px", borderRadius: radius.sm, cursor: "pointer",
-              fontSize: 12, fontWeight: 700, fontFamily: font,
+              fontSize: 14.5, fontWeight: 700, fontFamily: font,
             }}>⏻ SAIR</button>
           </div>
         </>

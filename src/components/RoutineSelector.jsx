@@ -35,13 +35,13 @@ export default function RoutineSelector() {
       <button onClick={() => setOpen(o => !o)} style={{
         display: "flex", alignItems: "center", gap: 6, background: colors.bgElevated2,
         border: `1px solid ${colors.border}`, color: colors.text, padding: "8px 12px",
-        borderRadius: radius.sm, cursor: "pointer", fontFamily: font, fontWeight: 700, fontSize: 12.5,
+        borderRadius: radius.sm, cursor: "pointer", fontFamily: font, fontWeight: 700, fontSize: 15,
         maxWidth: 180,
       }}>
         <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {activeRoutine?.name || "SEM ROTINA"}
         </span>
-        <span style={{ color: colors.babyBlue, fontSize: 10 }}>▼</span>
+        <span style={{ color: colors.babyBlue, fontSize: 12 }}>▼</span>
       </button>
 
       {open && (
@@ -60,7 +60,7 @@ export default function RoutineSelector() {
                 {renamingId === r.id ? (
                   <div style={{ display: "flex", gap: 6, flex: 1 }}>
                     <Input value={draftName} onChange={e => setDraftName(e.target.value)} autoFocus
-                      style={{ padding: "6px 8px", fontSize: 12 }} />
+                      style={{ padding: "6px 8px", fontSize: 14.5 }} />
                     <button onClick={() => handleRename(r.id)} style={iconBtn}>✔</button>
                   </div>
                 ) : (
@@ -68,7 +68,7 @@ export default function RoutineSelector() {
                     <button onClick={() => { switchRoutine(r.id); close(); }} style={{
                       flex: 1, textAlign: "left", background: "none", border: "none", cursor: "pointer",
                       color: r.id === activeRoutineId ? colors.babyBlue : colors.text,
-                      fontFamily: font, fontWeight: 600, fontSize: 13, padding: "4px 2px",
+                      fontFamily: font, fontWeight: 600, fontSize: 15.5, padding: "4px 2px",
                     }}>{r.name}</button>
                     <button onClick={() => { setRenamingId(r.id); setDraftName(r.name); }} style={iconBtn}>✎</button>
                     <button onClick={() => { if (confirm(`Excluir a rotina "${r.name}"?`)) removeRoutine(r.id); }} style={{ ...iconBtn, color: colors.danger }}>🗑</button>
@@ -80,14 +80,14 @@ export default function RoutineSelector() {
             {creating ? (
               <div style={{ display: "flex", gap: 6, marginTop: 6, padding: "0 2px" }}>
                 <Input placeholder="Nome da rotina" value={draftName} onChange={e => setDraftName(e.target.value)}
-                  autoFocus style={{ padding: "6px 8px", fontSize: 12 }} />
-                <Button onClick={handleCreate} style={{ padding: "6px 10px", fontSize: 11 }}>OK</Button>
+                  autoFocus style={{ padding: "6px 8px", fontSize: 14.5 }} />
+                <Button onClick={handleCreate} style={{ padding: "6px 10px", fontSize: 13 }}>OK</Button>
               </div>
             ) : (
               <button onClick={() => { setCreating(true); setDraftName(""); }} style={{
                 width: "100%", marginTop: 6, background: "none", border: `1px dashed ${colors.border}`,
                 color: colors.babyBlue, borderRadius: radius.sm, padding: "8px 0", cursor: "pointer",
-                fontFamily: font, fontWeight: 700, fontSize: 12,
+                fontFamily: font, fontWeight: 700, fontSize: 14.5,
               }}>+ NOVA ROTINA</button>
             )}
           </div>
@@ -99,5 +99,5 @@ export default function RoutineSelector() {
 
 const iconBtn = {
   background: "none", border: "none", color: colors.textMuted, cursor: "pointer",
-  fontSize: 12, padding: "4px 6px",
+  fontSize: 14.5, padding: "4px 6px",
 };

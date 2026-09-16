@@ -60,8 +60,8 @@ export default function ChooseWorkoutView({ setView }) {
                 opacity: w.exerciseIds?.length ? 1 : 0.5,
               }}
             >
-              <div style={{ fontSize: 15, fontWeight: 700, color: colors.text }}>{w.title}</div>
-              <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 3 }}>
+              <div style={{ fontSize: 18, fontWeight: 700, color: colors.text }}>{w.title}</div>
+              <div style={{ fontSize: 13, color: colors.textMuted, marginTop: 3 }}>
                 {w.exerciseIds?.length || 0} exercício(s){w.shuffle ? ` · sorteia ${sumSmartCount(w)}` : " · manual"}
               </div>
             </button>
@@ -87,7 +87,7 @@ export default function ChooseWorkoutView({ setView }) {
           style={{
             width: "100%", background: "transparent", border: `1.5px dashed ${colors.border}`,
             borderRadius: radius.lg, padding: "18px 16px", cursor: "pointer",
-            color: colors.babyBlue, fontSize: 22, fontWeight: 700,
+            color: colors.babyBlue, fontSize: 26.5, fontWeight: 700,
           }}
         >+</button>
       </div>
@@ -131,17 +131,17 @@ function ConfirmDeleteOverlay({ workout, onCancel, onConfirm }) {
         background: colors.bgElevated, border: `1px solid ${colors.danger}`, borderRadius: radius.lg,
         padding: 20, maxWidth: 320, width: "100%",
       }}>
-        <div style={{ fontSize: 13.5, color: colors.text, marginBottom: 16 }}>
+        <div style={{ fontSize: 16, color: colors.text, marginBottom: 16 }}>
           Excluir o treino <strong>"{workout.title}"</strong>? Essa ação não pode ser desfeita.
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <button onClick={onCancel} style={{
             flex: 1, padding: "10px 0", borderRadius: radius.sm, background: colors.bgInput,
-            border: `1px solid ${colors.border}`, color: colors.textMuted, cursor: "pointer", fontWeight: 700, fontSize: 12,
+            border: `1px solid ${colors.border}`, color: colors.textMuted, cursor: "pointer", fontWeight: 700, fontSize: 14.5,
           }}>CANCELAR</button>
           <button onClick={onConfirm} style={{
             flex: 1, padding: "10px 0", borderRadius: radius.sm, background: "rgba(255,93,108,0.15)",
-            border: `1px solid ${colors.danger}`, color: colors.danger, cursor: "pointer", fontWeight: 700, fontSize: 12,
+            border: `1px solid ${colors.danger}`, color: colors.danger, cursor: "pointer", fontWeight: 700, fontSize: 14.5,
           }}>EXCLUIR</button>
         </div>
       </div>
@@ -151,6 +151,6 @@ function ConfirmDeleteOverlay({ workout, onCancel, onConfirm }) {
 
 const iconBtnStyle = {
   width: 26, height: 26, borderRadius: radius.pill, border: `1px solid ${colors.border}`,
-  background: colors.bgInput, color: colors.textMuted, cursor: "pointer", fontSize: 11,
+  background: colors.bgInput, color: colors.textMuted, cursor: "pointer", fontSize: 13,
   display: "flex", alignItems: "center", justifyContent: "center",
 };

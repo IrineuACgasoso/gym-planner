@@ -11,7 +11,7 @@ export default function ManualSelectionOverlay({ workout, allExercises, onClose,
 
   return (
     <Overlay title={`Escolha os exercícios — ${workout.title}`} onClose={onClose} size="lg">
-      <div style={{ fontSize: 11.5, color: colors.textMuted, marginBottom: 10 }}>
+      <div style={{ fontSize: 14, color: colors.textMuted, marginBottom: 10 }}>
         Este treino está no modo manual. Marque os exercícios que quer fazer hoje — sua escolha fica salva para a próxima vez.
       </div>
       <div style={{ maxHeight: "52vh", overflowY: "auto", border: `1px solid ${colors.border}`, borderRadius: radius.md, marginBottom: 14 }}>
@@ -25,10 +25,10 @@ export default function ManualSelectionOverlay({ workout, allExercises, onClose,
             }}>
               <input type="checkbox" checked={checked} readOnly style={{ width: 17, height: 17, accentColor: colors.accent }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, color: colors.text, fontWeight: 600 }}>{e.name}</div>
+                <div style={{ fontSize: 15.5, color: colors.text, fontWeight: 600 }}>{e.name}</div>
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 3 }}>
-                  <Tag tone="muted" style={{ fontSize: 9 }}>{e.grupo}</Tag>
-                  {e.subgrupos?.slice(0, 2).map(s => <Tag key={s} style={{ fontSize: 9 }}>{s}</Tag>)}
+                  <Tag tone="muted" style={{ fontSize: 11 }}>{e.grupo}</Tag>
+                  {e.subgrupos?.slice(0, 2).map(s => <Tag key={s} style={{ fontSize: 11 }}>{s}</Tag>)}
                 </div>
               </div>
             </label>

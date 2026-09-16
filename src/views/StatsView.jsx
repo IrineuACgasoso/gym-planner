@@ -24,7 +24,7 @@ export default function StatsView({ setView }) {
         {[["calendar", "📅 CALENDÁRIO"], ["ranking", "🏆 RANKING"]].map(([id, label]) => (
           <button key={id} onClick={() => setTab(id)} style={{
             flex: 1, padding: "9px 0", borderRadius: radius.pill, border: "none", cursor: "pointer",
-            fontWeight: 700, fontSize: 11.5, letterSpacing: 0.5,
+            fontWeight: 700, fontSize: 14, letterSpacing: 0.5,
             background: tab === id ? gradients.primary : "transparent",
             color: tab === id ? "#03101F" : colors.textMuted,
           }}>{label}</button>
@@ -59,7 +59,7 @@ function CalendarTab({ history, onDelete, onUpdate }) {
         <Calendar markedDates={markedDates} onSelectDate={date => { setSelectedDate(date); setEditingId(null); }} selectedDate={selectedDate} />
       </Card>
 
-      <div style={{ fontSize: 12, color: colors.textFaint, marginBottom: 8, letterSpacing: 0.5 }}>
+      <div style={{ fontSize: 14.5, color: colors.textFaint, marginBottom: 8, letterSpacing: 0.5 }}>
         {formatDateBR(selectedDate)}
       </div>
 
@@ -103,11 +103,11 @@ function SessionCard({ session, editing, onToggleEdit, onDelete, onSave }) {
     <Card>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, gap: 10 }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 14.5, fontWeight: 700, color: colors.text }}>{s.workoutTitle}</div>
-          <div style={{ fontSize: 11, color: colors.textMuted, marginTop: 2 }}>{s.routineName}</div>
+          <div style={{ fontSize: 17.5, fontWeight: 700, color: colors.text }}>{s.workoutTitle}</div>
+          <div style={{ fontSize: 13, color: colors.textMuted, marginTop: 2 }}>{s.routineName}</div>
           {editing && (
             <Input type="date" value={s.date} onChange={ev => setDraft(d => ({ ...d, date: ev.target.value }))}
-              style={{ marginTop: 8, padding: "7px 8px", fontSize: 12.5 }} />
+              style={{ marginTop: 8, padding: "7px 8px", fontSize: 15 }} />
           )}
         </div>
         <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
@@ -115,9 +115,9 @@ function SessionCard({ session, editing, onToggleEdit, onDelete, onSave }) {
             variant={editing ? "secondary" : "ghost"}
             onClick={onToggleEdit}
             title="Editar treino finalizado"
-            style={{ padding: "5px 9px", fontSize: 10 }}
+            style={{ padding: "5px 9px", fontSize: 12 }}
           >✏️</Button>
-          <Button variant="danger" onClick={onDelete} style={{ padding: "5px 9px", fontSize: 10 }}>🗑</Button>
+          <Button variant="danger" onClick={onDelete} style={{ padding: "5px 9px", fontSize: 12 }}>🗑</Button>
         </div>
       </div>
 
@@ -129,33 +129,33 @@ function SessionCard({ session, editing, onToggleEdit, onDelete, onSave }) {
                 <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: e.isCardio ? 6 : 8, cursor: "pointer" }}>
                   <input type="checkbox" checked={!!e.done} onChange={ev => patchExercise(i, { done: ev.target.checked })}
                     style={{ width: 16, height: 16, accentColor: colors.accent }} />
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: colors.text }}>{e.name}</span>
+                  <span style={{ fontSize: 15, fontWeight: 700, color: colors.text }}>{e.name}</span>
                 </label>
                 {e.isCardio ? (
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
-                    <Input placeholder="Tempo (mm:ss)" value={e.cardio?.tempo || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, tempo: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 12 }} />
-                    <Input placeholder="Distância (km)" value={e.cardio?.km || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, km: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 12 }} />
-                    <Input placeholder="Pace (mm:ss/km)" value={e.cardio?.pace || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, pace: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 12 }} />
+                    <Input placeholder="Tempo (mm:ss)" value={e.cardio?.tempo || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, tempo: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 14.5 }} />
+                    <Input placeholder="Distância (km)" value={e.cardio?.km || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, km: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 14.5 }} />
+                    <Input placeholder="Pace (mm:ss/km)" value={e.cardio?.pace || ""} onChange={ev => patchExercise(i, { cardio: { ...e.cardio, pace: ev.target.value } })} style={{ padding: "7px 8px", fontSize: 14.5 }} />
                   </div>
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                     {(e.sets || []).map((set, si) => (
                       <div key={si} style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                        <span style={{ fontSize: 10.5, color: colors.textFaint, width: 14 }}>{si + 1}</span>
-                        <Input placeholder="Reps" value={set.reps || ""} onChange={ev => patchSet(i, si, { reps: ev.target.value })} style={{ padding: "6px 8px", fontSize: 12 }} />
-                        <Input placeholder="Peso (kg)" value={set.peso || ""} onChange={ev => patchSet(i, si, { peso: ev.target.value })} style={{ padding: "6px 8px", fontSize: 12 }} />
+                        <span style={{ fontSize: 12.5, color: colors.textFaint, width: 14 }}>{si + 1}</span>
+                        <Input placeholder="Reps" value={set.reps || ""} onChange={ev => patchSet(i, si, { reps: ev.target.value })} style={{ padding: "6px 8px", fontSize: 14.5 }} />
+                        <Input placeholder="Peso (kg)" value={set.peso || ""} onChange={ev => patchSet(i, si, { peso: ev.target.value })} style={{ padding: "6px 8px", fontSize: 14.5 }} />
                       </div>
                     ))}
                   </div>
                 )}
               </div>
             ) : (
-              <div style={{ fontSize: 12, color: colors.textMuted, display: "flex", justifyContent: "space-between" }}>
+              <div style={{ fontSize: 14.5, color: colors.textMuted, display: "flex", justifyContent: "space-between" }}>
                 <span style={{ color: e.done ? colors.text : colors.textFaint }}>{e.done ? "✓" : "—"} {e.name}</span>
                 <span>
                   {e.isCardio
                     ? [e.cardio?.km && `${e.cardio.km}km`, e.cardio?.tempo && `${e.cardio.tempo}min`, e.cardio?.pace && `${e.cardio.pace}/km`].filter(Boolean).join(" · ")
-                    : `${e.sets?.length || 0} série(s)`}
+                    : `${e.done ? (e.sets?.length || 0) : 0} série(s)`}
                 </span>
               </div>
             )}
@@ -165,8 +165,8 @@ function SessionCard({ session, editing, onToggleEdit, onDelete, onSave }) {
 
       {editing && (
         <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-          <Button variant="ghost" onClick={onToggleEdit} style={{ flex: 1, padding: "9px 0", fontSize: 11.5 }}>CANCELAR</Button>
-          <Button onClick={() => onSave(draft)} style={{ flex: 1, padding: "9px 0", fontSize: 11.5 }}>SALVAR</Button>
+          <Button variant="ghost" onClick={onToggleEdit} style={{ flex: 1, padding: "9px 0", fontSize: 14 }}>CANCELAR</Button>
+          <Button onClick={() => onSave(draft)} style={{ flex: 1, padding: "9px 0", fontSize: 14 }}>SALVAR</Button>
         </div>
       )}
     </Card>
@@ -223,7 +223,7 @@ function RankingTab({ history, routines }) {
         {[["frequency", "Frequência"], ["cardio", "Cardio (km/pace)"]].map(([id, label]) => (
           <button key={id} onClick={() => setMetric(id)} style={{
             flex: 1, padding: "7px 0", borderRadius: radius.pill, cursor: "pointer",
-            fontWeight: 700, fontSize: 11, background: metric === id ? colors.bgElevated2 : "transparent",
+            fontWeight: 700, fontSize: 13, background: metric === id ? colors.bgElevated2 : "transparent",
             color: metric === id ? colors.babyBlue : colors.textMuted,
             border: metric === id ? `1px solid ${colors.accent}` : "1px solid transparent",
           }}>{label}</button>
@@ -236,7 +236,7 @@ function RankingTab({ history, routines }) {
             {frequencyRanking.map(([title, count], i) => (
               <Card key={title} style={{ padding: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: colors.text }}>#{i + 1} {title}</span>
+                  <span style={{ fontSize: 15.5, fontWeight: 700, color: colors.text }}>#{i + 1} {title}</span>
                   <Tag>{count}x</Tag>
                 </div>
                 <div style={{ height: 6, background: colors.bgInput, borderRadius: radius.pill, overflow: "hidden" }}>
@@ -253,8 +253,8 @@ function RankingTab({ history, routines }) {
               <Card key={i} style={{ padding: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: colors.text }}>{r.name}</div>
-                    <div style={{ fontSize: 10.5, color: colors.textFaint, marginTop: 2 }}>{formatDateBR(r.date)}</div>
+                    <div style={{ fontSize: 15.5, fontWeight: 700, color: colors.text }}>{r.name}</div>
+                    <div style={{ fontSize: 12.5, color: colors.textFaint, marginTop: 2 }}>{formatDateBR(r.date)}</div>
                   </div>
                   <div style={{ display: "flex", gap: 6 }}>
                     {r.km && <Tag>{r.km} km</Tag>}
